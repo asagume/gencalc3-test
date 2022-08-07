@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
-  indexPath: 'indexV.html',
+  indexPath: 'index.html',
 
   pages: {
     index: {
@@ -9,6 +9,10 @@ module.exports = defineConfig({
       template: 'public/indexV.html',
     },
   },
+
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/gencalc3-test/'
+    : '/',
 
   pluginOptions: {
     i18n: {
