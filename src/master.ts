@@ -313,7 +313,9 @@ const CHARACTER_MASTER_DETAIL_MAP = new Map();
 export async function getCharacterMasterDetail(character: TCharacterKey): Promise<TCharacterDetail> {
     try {
         if (!CHARACTER_MASTER_DETAIL_MAP.has(character)) {
-            const characterMaster = await fetch(CHARACTER_MASTER[character]['import']).then(resp => resp.json());
+            const url = CHARACTER_MASTER[character]['import'];
+            console.log(getCharacterMasterDetail.name, url);
+            const characterMaster = await fetch(url).then(resp => resp.json());
             removeStrFromUrl(characterMaster, 'public/');
             CHARACTER_MASTER_DETAIL_MAP.set(character, characterMaster);
         }

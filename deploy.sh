@@ -1,6 +1,8 @@
 # abort on errors
 set -e
 
+set NODE_ENV=production
+
 # build
 npm run build
 

@@ -127,7 +127,6 @@ function getCharacterByBirthday(): TCharacterKey {
             const birthdayStrArr = entry['誕生日'].split('/');
             const birthday = new Date(today.getFullYear(), Number(birthdayStrArr[0]) - 1, Number(birthdayStrArr[1]), 0, 0, 0, 0);
             const diff = today.getTime() - birthday.getTime();
-            console.log(today, birthday, diff, entry.key);
             if (diff < 0) continue;
             if (diff < curDiff) {
                 curDiff = diff;
