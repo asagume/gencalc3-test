@@ -13,6 +13,9 @@ module.exports = defineConfig({
   publicPath: process.env.NODE_ENV === 'production'
     ? '/gencalc3-test/'
     : '/',
+  outputDir: 'docs',
+  assetsDir: './',
+  publicPath: './',
 
   pluginOptions: {
     i18n: {
