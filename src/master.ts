@@ -42,6 +42,36 @@ export {
     ELEMENTAL_REACTION_MASTER
 };
 
+function removeStrFromUrl(obj: any, str: string) {
+    if (isPlainObject(obj)) {
+        for (const key of Object.keys(obj)) {
+            if (isString(obj[key])) {
+                obj[key] = obj[key].replace(str, '');
+            } else if (isPlainObject(obj[key])) {
+                removeStrFromUrl(obj[key], str);
+            } else if (Array.isArray(obj[key])) {
+                for (const entry of obj[key]) {
+                    removeStrFromUrl(entry, str);
+                }
+            }
+        }
+    }
+}
+
+for (const master of [
+    CHARACTER_MASTER,
+    SWORD_MASTER,
+    CLAYMORE_MASTER,
+    POLEARM_MASTER,
+    BOW_MASTER,
+    CATALYST_MASTER,
+    ARTIFACT_SET_MASTER
+]) {
+    for (const key of Object.keys(master)) {
+        removeStrFromUrl((master as any)[key], 'public/');
+    }
+}
+
 export const IMG_SRC_DUMMY = "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7";
 
 export type TVisionKey = '炎' | '水' | '風' | '雷' | '草' | '氷' | '岩';
@@ -288,22 +318,6 @@ export const DICTIONARY_MASTER = { ...HOYO_DICTIONARY2, ...HOYO_DICTIONARY4, ...
 
 ////////////////
 ////////////////
-function removeStrFromUrl(obj: any, str: string) {
-    if (isPlainObject(obj)) {
-        for (const key of Object.keys(obj)) {
-            if (isString(obj[key])) {
-                obj[key] = obj[key].replace(str, '');
-            } else if (isPlainObject(obj[key])) {
-                removeStrFromUrl(obj[key], str);
-            } else if (Array.isArray(obj[key])) {
-                for (const entry of obj[key]) {
-                    removeStrFromUrl(entry, str);
-                }
-            }
-        }
-    }
-}
-
 const CHARACTER_MASTER_DETAIL_MAP = new Map();
 /**
  * 
