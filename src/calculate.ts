@@ -540,6 +540,23 @@ export function calculateResult(damageResult: TDamageResult, characterInput: TCh
                     const resultArr = calculateDamageFromDetail(talentDetail, characterInput, conditionInput, statsInput.statsObj, damageResult, element);
                     (damageResult[category] as any).push(resultArr);
                 }
+                if (category == '通常攻撃') {
+                    let n = 0;
+                    const sum = ['合計ダメージ', null, 0, 0, 0, null] as TDamageResultEntry;
+                    for (const entry of damageResult[category]) {
+                        if (entry[0].endsWith('段ダメージ')) {
+                            sum[1] = entry[1];
+                            sum[2] += entry[2];
+                            if (entry[3] == null) sum[3] = null;
+                            else if (sum[3] != null) sum[3] += entry[3];
+                            sum[4] += entry[4];
+                            n++;
+                        }
+                    }
+                    if (n > 0) {
+                        damageResult[category].splice(n, 1, sum);
+                    }
+                }
             }
             for (const category of ['元素スキル', '元素爆発', 'その他']) {
                 damageResult[category] = [];
