@@ -70,7 +70,7 @@
       </table>
       <table v-if="resultStyleRef == '0'" class="result h-style">
         <thead>
-          <tr>
+          <tr @click="categoryOnClick(category)">
             <th>{{ displayName(category) }}</th>
             <th v-for="item in itemList(category)" :key="item[0]">{{ displayName(item[0]) }}</th>
           </tr>
@@ -80,16 +80,18 @@
           <td v-for="item in itemList(category)" :key="item[0]" :class="'damage-value ' + elementClass(item[1])">
             {{ displayDamageValue(item, 2) }}</td>
         </tr>
-        <tr>
-          <th>{{ displayName('会心') }}</th>
-          <td v-for="item in itemList(category)" :key="item[0]" :class="'damage-value ' + elementClass(item[1])">
-            {{ displayDamageValue(item, 3) }}</td>
-        </tr>
-        <tr>
-          <th>{{ displayName('非会心') }}</th>
-          <td v-for="item in itemList(category)" :key="item[0]" :class="'damage-value ' + elementClass(item[1])">
-            {{ displayDamageValue(item, 4) }}</td>
-        </tr>
+        <template v-if="categoryOpenClose[category]">
+          <tr>
+            <th>{{ displayName('会心') }}</th>
+            <td v-for="item in itemList(category)" :key="item[0]" :class="'damage-value ' + elementClass(item[1])">
+              {{ displayDamageValue(item, 3) }}</td>
+          </tr>
+          <tr>
+            <th>{{ displayName('非会心') }}</th>
+            <td v-for="item in itemList(category)" :key="item[0]" :class="'damage-value ' + elementClass(item[1])">
+              {{ displayDamageValue(item, 4) }}</td>
+          </tr>
+        </template>
       </table>
     </template>
   </template>
@@ -193,7 +195,7 @@ table.result.h-style td {
 }
 
 table.result.h-style th:first-child {
-  width: 14rem;
+  width: 13rem;
   text-align: right;
 }
 
