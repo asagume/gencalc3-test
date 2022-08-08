@@ -1,12 +1,8 @@
 <template>
   <fieldset>
     <label v-for="item in checkboxList" :key="item.name">
-      <input
-        type="checkbox"
-        v-model="conditionValues[item.name]"
-        :value="item.name"
-        @change="$emit('update:condition')"
-      />
+      <input type="checkbox" v-model="conditionValues[item.name]" :value="item.name"
+        @change="$emit('update:condition')" />
       <span>{{ displayName(item.name) }}</span>
     </label>
     <label v-for="item in selectList" :key="item.name">
@@ -21,9 +17,7 @@
 </template>
 
 <script lang="ts">
-import { deepcopy } from "@/common";
 import GlobalMixin from "@/GlobalMixin.vue";
-import { CONDITION_INPUT_TEMPLATE } from "@/input";
 import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
@@ -35,9 +29,7 @@ export default defineComponent({
   },
   emits: ["update:condition"],
   setup(props) {
-    const conditionInputRea = reactive(
-      props.conditionInput ?? deepcopy(CONDITION_INPUT_TEMPLATE)
-    );
+    const conditionInputRea = reactive(props.conditionInput);
     const conditionValues = conditionInputRea.conditionValues;
     const checkboxList = conditionInputRea.checkboxList;
     const selectList = conditionInputRea.selectList;
@@ -62,7 +54,7 @@ label select {
   margin: 0 0.5rem;
 }
 
-:checked + span {
+:checked+span {
   color: palevioletred;
 }
 </style>

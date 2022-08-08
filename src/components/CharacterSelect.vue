@@ -42,8 +42,8 @@ export default defineComponent({
     name: 'CharacterSelect',
     mixins: [GlobalMixin],
     props: {
-        character: String,
-        visible: Boolean,
+        character: { type: String, required: true },
+        visible: { type: Boolean, required: true },
     },
     emits: ['update:character'],
     setup(props) {

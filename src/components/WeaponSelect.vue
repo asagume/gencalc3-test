@@ -8,13 +8,8 @@
       </tr>
       <tr>
         <td>
-          <img
-            v-for="i in Array.from({ length: weaponMasterRef.レアリティ }, (_, i) => i)"
-            class="star"
-            src="../../public/images/star.png"
-            alt="star"
-            :key="i"
-          />
+          <img v-for="i in Array.from({ length: weaponMasterRef.レアリティ }, (_, i) => i)" class="star"
+            src="images/star.png" alt="star" :key="i" />
         </td>
         <th class="stat">
           <template v-if="stats[1]"> {{ displayName(stats[1].key) }} </template>
@@ -30,23 +25,15 @@
           <th class="title" colspan="3">{{ weaponMasterRef.武器スキル.名前 }}</th>
         </tr>
         <tr>
-          <td
-            colspan="3"
-            class="description"
-            v-html="weaponMasterRef.武器スキル.説明"
-          ></td>
+          <td colspan="3" class="description" v-html="weaponMasterRef.武器スキル.説明"></td>
         </tr>
       </template>
     </table>
 
     <ul class="select-list">
       <li class="icon" v-for="item in filteredList" :key="item.key">
-        <img
-          :class="'weapon' + bgImageClass(item) + selectedClass(item)"
-          :src="item.icon_url"
-          :alt="item.key"
-          @click="updateWeapon(item.key)"
-        />
+        <img :class="'weapon' + bgImageClass(item) + selectedClass(item)" :src="item.icon_url" :alt="item.key"
+          @click="updateWeapon(item.key)" />
         <div class="tooltip">{{ displayName(item.key) }}</div>
       </li>
     </ul>
@@ -55,7 +42,6 @@
 
 <script lang="ts">
 import { getStatValueByLevel } from "@/calculate";
-import { deepcopy } from "@/common";
 import GlobalMixin from "@/GlobalMixin.vue";
 import {
   STAR_BACKGROUND_IMAGE_CLASS,
@@ -63,7 +49,6 @@ import {
   TWeaponEntry,
   TWeaponKey,
   TWeaponTypeKey,
-  WEAPON_DETAIL_TEMPLATE,
   WEAPON_MASTER_LIST,
 } from "@/master";
 import { defineComponent, computed, ref, PropType } from "vue";
@@ -86,9 +71,9 @@ export default defineComponent({
     const selectedClass = (item: TWeaponEntry) => {
       return item.key == props.weapon ? " selected" : "";
     };
-    const weaponRef = ref(props.weapon ?? "西風猟弓");
-    const weaponTypeRef = ref(props.weaponType as TWeaponTypeKey);
-    const weaponMasterRef = ref(props.weaponMaster ?? deepcopy(WEAPON_DETAIL_TEMPLATE));
+    const weaponRef = ref(props.weapon);
+    const weaponTypeRef = ref(props.weaponType);
+    const weaponMasterRef = ref(props.weaponMaster);
 
     const stats = computed(() => {
       const result = [] as { key: string; value: number }[];

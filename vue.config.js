@@ -6,7 +6,7 @@ module.exports = defineConfig({
   pages: {
     index: {
       entry: 'src/main.ts',
-      template: 'public/indexV.html',
+      template: 'public/index3.html',
     },
   },
 

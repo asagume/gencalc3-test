@@ -1,11 +1,7 @@
 <template>
   <fieldset class="elemental-resonance">
     <label v-for="item in elementalResonanceList" :key="item.key">
-      <input
-        type="checkbox"
-        v-model="elementalResonanceCheckedRea[item.key]"
-        @change="onChange(item.key)"
-      />
+      <input type="checkbox" v-model="elementalResonanceCheckedRea[item.key]" @change="onChange(item.key)" />
       <span>{{ displayName(item.名前) }}</span>
     </label>
     <hr />
@@ -33,9 +29,7 @@ export default defineComponent({
   },
   setup(props, context) {
     const elementalResonanceList = ELEMENTAL_RESONANCE_MASTER_LIST;
-    const elementalResonanceCheckedRea = reactive(
-      props.elementalResonanceChecked ?? ({} as { [key: string]: boolean })
-    );
+    const elementalResonanceCheckedRea = reactive(props.elementalResonanceChecked);
 
     const statAdjustments = computed(() => {
       const workObj = {} as TStats;

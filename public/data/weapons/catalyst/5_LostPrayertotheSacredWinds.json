@@ -1,7 +1,7 @@
 {
     "名前": "四風原典",
     "説明": "風を信仰する先民たちが書いた教典。数千年の歴史を経た信仰は風に恵まれ、祝福の力に満ちている。",
-    "icon_url": "public/images/weapons/catalyst/5_LostPrayertotheSacredWinds.png",
+    "icon_url": "images/weapons/catalyst/5_LostPrayertotheSacredWinds.png",
     "レアリティ": 5,
     "種類": "法器",
     "ステータス": {
