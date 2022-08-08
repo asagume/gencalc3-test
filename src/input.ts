@@ -802,7 +802,7 @@ export function makeDamageDetailObjArrObjCharacter(characterInput: TCharacterInp
         myTalentChangeDetailObjArr.filter(s => s['条件']).forEach(detailObj => {
             makeConditionExclusionMapFromStr(detailObj['条件'], conditionMap, exclusionMap);
         });
-        conditionMap.delete('命ノ星座');
+        // conditionMap.delete('命ノ星座');
         conditionMap.forEach((value, key) => {
             if (value && Array.isArray(value)) {
                 if (!value[0].startsWith('required_')) {
