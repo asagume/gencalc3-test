@@ -836,7 +836,7 @@ function calculateDamageFromDetail(
                                 if (reRet[1] == '+') {  // 加算
                                     newSelectedIndex = Math.min(curSelectedIndex + Number(reRet[2]), optionList.length - 1);
                                 } else {    // 減算
-                                    newSelectedIndex = Math.min(curSelectedIndex - Number(reRet[2]), 0);
+                                    newSelectedIndex = Math.max(curSelectedIndex - Number(reRet[2]), 0);
                                 }
                             } else {    // 直値
                                 newSelectedIndex = Number(reRet[2]);

@@ -42,7 +42,6 @@
 
 <script lang="ts">
 import { getStatValueByLevel } from "@/calculate";
-import { deepcopy } from "@/common";
 import GlobalMixin from "@/GlobalMixin.vue";
 import {
   STAR_BACKGROUND_IMAGE_CLASS,
@@ -50,7 +49,6 @@ import {
   TWeaponEntry,
   TWeaponKey,
   TWeaponTypeKey,
-  WEAPON_DETAIL_TEMPLATE,
   WEAPON_MASTER_LIST,
 } from "@/master";
 import { defineComponent, computed, ref, PropType } from "vue";
@@ -73,9 +71,9 @@ export default defineComponent({
     const selectedClass = (item: TWeaponEntry) => {
       return item.key == props.weapon ? " selected" : "";
     };
-    const weaponRef = ref(props.weapon ?? "西風猟弓");
-    const weaponTypeRef = ref(props.weaponType as TWeaponTypeKey);
-    const weaponMasterRef = ref(props.weaponMaster ?? deepcopy(WEAPON_DETAIL_TEMPLATE));
+    const weaponRef = ref(props.weapon);
+    const weaponTypeRef = ref(props.weaponType);
+    const weaponMasterRef = ref(props.weaponMaster);
 
     const stats = computed(() => {
       const result = [] as { key: string; value: number }[];
