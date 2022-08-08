@@ -299,10 +299,20 @@ export default defineComponent({
         }
         const damageResult = supporter ? supporterDamageResult.get(supporter) : damageResultDummy;
         const myValue = calculateFormulaArray(myNew数値, workObj, damageResult);
-        if (myDetailObj["種類"] in workObj) {
-          workObj[myDetailObj["種類"]] += myValue;
+        const kinds = [] as string[];
+        if (myDetailObj["種類"].startsWith('全') || myDetailObj["種類"].startsWith('敵全')) {
+          for (const elem of ['炎', '水', '風', '雷', '草', '氷', '岩']) {
+            kinds.push(myDetailObj["種類"].replace('全', elem))
+          }
         } else {
-          workObj[myDetailObj["種類"]] = myValue;
+          kinds.push(myDetailObj["種類"]);
+        }
+        for (const kind of kinds) {
+          if (kind in workObj) {
+            workObj[kind] += myValue;
+          } else {
+            workObj[kind] = myValue;
+          }
         }
       }
       return workObj;
