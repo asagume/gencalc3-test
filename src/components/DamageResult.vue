@@ -72,7 +72,11 @@
         <thead>
           <tr @click="categoryOnClick(category)">
             <th>{{ displayName(category) }}</th>
-            <th v-for="item in itemList(category)" :key="item[0]">{{ displayName(item[0]) }}</th>
+            <template v-for="(item, index) in itemList(category)" :key="item[0]">
+              <th v-if="name(category, index)" :colspan="colspan(category, index)">
+                {{ displayName(name(category, index)) }}
+              </th>
+            </template>
           </tr>
         </thead>
         <tr>
@@ -113,6 +117,7 @@
 </template>
 <script lang="ts">
 import GlobalMixin from "@/GlobalMixin.vue";
+import { TDamageResultEntry } from "@/input";
 import { ELEMENT_COLOR_CLASS, TElementColorClassKey } from "@/master";
 import { defineComponent, reactive, ref } from "vue";
 
@@ -159,6 +164,26 @@ export default defineComponent({
     const itemList = (category: string) => {
       return props.damageResult[category].filter((s: any[]) => !s[0].startsWith("非表示"));
     };
+
+    const name = (category: string, index: number) => {
+      const item = itemList(category)[index];
+      if (index == 0) return item[0];
+      const preItem = itemList(category)[index - 1];
+      if (item[0] == preItem[0]) return null;
+      return item[0];
+    }
+
+    const colspan = (category: string, index: number) => {
+      let cols = 1;
+      const item = itemList(category)[index];
+      for (let i = index + 1; i < itemList(category).length; i++) {
+        const nextItem = itemList(category)[i];
+        if (item[0] == nextItem[0]) cols++;
+        else break;
+      }
+      return cols;
+    }
+
     const categoryOpenClose = reactive({} as { [key: string]: boolean });
     for (const key of CATEGORY_LIST) categoryOpenClose[key] = true;
 
@@ -175,6 +200,8 @@ export default defineComponent({
       itemList,
       categoryOpenClose,
       categoryOnClick,
+      name,
+      colspan,
       resultStyleRef,
     };
   },
