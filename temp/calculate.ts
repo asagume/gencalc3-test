@@ -790,47 +790,47 @@ function calculateDamageFromDetail(
         let validConditionValueArr = makeValidConditionValueArr(conditionInput);  // 有効な条件
 
         if (detailObj['除外条件']) {
-            for (const condition of detailObj['除外条件']) {
-                if (isPlainObject(condition)) {
-                    const number = checkConditionMatches(condition['名前'], validConditionValueArr, constellation);
+            for (const delCondition of detailObj['除外条件']) {
+                if (isPlainObject(delCondition)) {
+                    const number = checkConditionMatches(delCondition['名前'], validConditionValueArr, constellation);
                     if (number > 0) {
-                        ステータス条件取消(myステータス補正, condition['名前'], statsObj, validConditionValueArr, statusChangeDetailObjArr);
-                        validConditionValueArr = validConditionValueArr.filter(s => s != condition && !s.startsWith(condition + '@'));
+                        ステータス条件取消(myステータス補正, delCondition['名前'], statsObj, validConditionValueArr, statusChangeDetailObjArr);
+                        validConditionValueArr = validConditionValueArr.filter(s => s != delCondition && !s.startsWith(delCondition + '@'));
                     }
-                    // if ('説明' in condition) {
-                    //     if (Array.isArray(condition['説明'])) {
-                    //         condition['説明'].forEach(description => {
-                    //             if (!statsObj['キャラクター注釈'].includes(description)) {
-                    //                 statsObj['キャラクター注釈'].push(description);
-                    //             }
-                    //         });
-                    //     } else {
-                    //         if (!statsObj['キャラクター注釈'].includes(condition['説明'])) {
-                    //             statsObj['キャラクター注釈'].push(condition['説明']);
-                    //         }
-                    //     }
-                    // }
-                } else if (validConditionValueArr.includes(condition)) {
-                    ステータス条件取消(myステータス補正, condition, statsObj, validConditionValueArr, statusChangeDetailObjArr);
-                    validConditionValueArr = validConditionValueArr.filter(s => s != condition && !s.startsWith(condition + '@'));
+                    if ('説明' in delCondition) {
+                        if (Array.isArray(delCondition['説明'])) {
+                            delCondition['説明'].forEach(description => {
+                                if (!damageResult['キャラクター注釈'].includes(description)) {
+                                    damageResult['キャラクター注釈'].push(description);
+                                }
+                            });
+                        } else {
+                            if (!damageResult['キャラクター注釈'].includes(delCondition['説明'])) {
+                                damageResult['キャラクター注釈'].push(delCondition['説明']);
+                            }
+                        }
+                    }
+                } else if (validConditionValueArr.includes(delCondition)) {
+                    ステータス条件取消(myステータス補正, delCondition, statsObj, validConditionValueArr, statusChangeDetailObjArr);
+                    validConditionValueArr = validConditionValueArr.filter(s => s != delCondition && !s.startsWith(delCondition + '@'));
                 }
             }
         }
 
         if (detailObj['適用条件']) {
-            for (const condition of detailObj['適用条件']) {
-                if (isPlainObject(condition)) {
-                    if (!(condition['名前'] in conditionInput.conditionValues)) continue;
-                    if (condition['種類'] && condition['種類'] == 'selectedIndex') { // for 甘雨+アモスの弓
-                        const conditionObjArr = conditionInput.selectList.filter(s => s.name == condition['名前']);
+            for (const addCondition of detailObj['適用条件']) {
+                if (isPlainObject(addCondition)) {
+                    if (!(addCondition['名前'] in conditionInput.conditionValues)) continue;
+                    if (addCondition['種類'] && addCondition['種類'] == 'selectedIndex') { // for 甘雨+アモスの弓
+                        const conditionObjArr = conditionInput.selectList.filter(s => s.name == addCondition['名前']);
                         if (conditionObjArr.length == 0) continue;
-                        const optionList = conditionInput.selectList.filter(s => s.name == condition['名前']).map(s => s.options)[0];
-                        const curSelectedIndex = conditionInput.conditionValues[condition['名前']] as number;
+                        const optionList = conditionInput.selectList.filter(s => s.name == addCondition['名前']).map(s => s.options)[0];
+                        const curSelectedIndex = conditionInput.conditionValues[addCondition['名前']] as number;
                         const curSelectedValue = optionList[curSelectedIndex];
                         let newSelectedIndex;
                         let newSelectedValue;
                         const re = new RegExp('([\\+\\-]?)(\\d+)');
-                        const reRet = re.exec(String(condition['数値']));
+                        const reRet = re.exec(String(addCondition['数値']));
                         if (reRet) {
                             if (reRet[1]) {
                                 if (reRet[1] == '+') {  // 加算
@@ -843,7 +843,7 @@ function calculateDamageFromDetail(
                             }
                             newSelectedValue = optionList[newSelectedIndex];
                             if (curSelectedIndex > 0) {
-                                const curCondition = condition['名前'] + '@' + curSelectedValue;
+                                const curCondition = addCondition['名前'] + '@' + curSelectedValue;
                                 if (validConditionValueArr.includes(curCondition)) {
                                     validConditionValueArr = validConditionValueArr.filter(p => p != curCondition);
                                 }
@@ -867,7 +867,7 @@ function calculateDamageFromDetail(
                                     });
                                 });
                             }
-                            const newCondition = condition['名前'] + '@' + newSelectedValue;
+                            const newCondition = addCondition['名前'] + '@' + newSelectedValue;
                             validConditionValueArr.push(newCondition);
                             statusChangeDetailObjArr.forEach(valueObj => {
                                 if (!valueObj['条件']) return;
@@ -889,30 +889,30 @@ function calculateDamageFromDetail(
                                 });
                             });
                         } else {
-                            console.error(detailObj, opt_element, null, condition);
+                            console.error(detailObj, opt_element, null, addCondition);
                         }
                     } else {
-                        if (!validConditionValueArr.includes(condition)) {
-                            ステータス条件追加(myステータス補正, condition, statsObj, statusChangeDetailObjArr);
-                            validConditionValueArr.push(condition);
+                        if (!validConditionValueArr.includes(addCondition)) {
+                            ステータス条件追加(myステータス補正, addCondition, statsObj, statusChangeDetailObjArr);
+                            validConditionValueArr.push(addCondition);
                         }
                     }
-                    // if ('説明' in condition) {
-                    //     if (Array.isArray(condition['説明'])) {
-                    //         condition['説明'].forEach(description => {
-                    //             if (!statsObj['キャラクター注釈'].includes(description)) {
-                    //                 statsObj['キャラクター注釈'].push(description);
-                    //             }
-                    //         });
-                    //     } else {
-                    //         if (!statsObj['キャラクター注釈'].includes(condition['説明'])) {
-                    //             statsObj['キャラクター注釈'].push(condition['説明']);
-                    //         }
-                    //     }
-                    // }
-                } else if (!validConditionValueArr.includes(condition)) {
-                    ステータス条件追加(myステータス補正, condition, statsObj, statusChangeDetailObjArr);
-                    validConditionValueArr.push(condition);
+                    if ('説明' in addCondition) {
+                        if (Array.isArray(addCondition['説明'])) {
+                            addCondition['説明'].forEach(description => {
+                                if (!damageResult['キャラクター注釈'].includes(description)) {
+                                    damageResult['キャラクター注釈'].push(description);
+                                }
+                            });
+                        } else {
+                            if (!damageResult['キャラクター注釈'].includes(addCondition['説明'])) {
+                                damageResult['キャラクター注釈'].push(addCondition['説明']);
+                            }
+                        }
+                    }
+                } else if (!validConditionValueArr.includes(addCondition)) {
+                    ステータス条件追加(myステータス補正, addCondition, statsObj, statusChangeDetailObjArr);
+                    validConditionValueArr.push(addCondition);
                 }
             }
         }
