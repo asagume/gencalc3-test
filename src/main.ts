@@ -155,6 +155,7 @@ async function main() {
     } else {
         characterInput.character = getCharacterByBirthday();
     }
+    console.log('url', savedata);
     characterInput.characterMaster = await getCharacterMasterDetail(characterInput.character);
     const recommendationList = makeRecommendationList(characterInput.characterMaster, savedata);
     const recommendation = recommendationList[0];

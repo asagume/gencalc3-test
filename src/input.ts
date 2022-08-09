@@ -468,6 +468,7 @@ export function makeRecommendationList(characterMaster: { [key: string]: any }, 
     if (opt_buildData) {
         result.push({ name: 'IMPORTED DATA', build: opt_buildData, overwrite: false });
         isSavable = true;
+        console.log(opt_buildData);
     }
 
     const storageKeyArr: string[] = [];
@@ -564,7 +565,12 @@ function makeArtifactSetAbbrev(name: string): string {
     return abbr;
 }
 
-export async function loadRecommendation(characterInput: TCharacterInput, artifactDetailInput: TArtifactDetailInput, conditionInput: TConditionInput, build: { [key: string]: any }) {
+export async function loadRecommendation(
+    characterInput: TCharacterInput,
+    artifactDetailInput: TArtifactDetailInput,
+    conditionInput: TConditionInput,
+    build: { [key: string]: any }
+) {
     try {
         const character = characterInput.character;
         const characterMaster = await getCharacterMasterDetail(character);
@@ -592,8 +598,11 @@ export async function loadRecommendation(characterInput: TCharacterInput, artifa
         }
 
         let prioritySubstatsDisabled = false;
-        if (Object.keys((s: string) => s.startsWith('聖遺物サブ効果')).length > 0) {
-            prioritySubstatsDisabled = true;
+        for (const key of Object.keys(build).filter((s: string) => s.startsWith('聖遺物サブ効果'))) {
+            let toKey = key.replace(/^聖遺物サブ効果/, '');
+            if (toKey != 'HP') toKey = toKey.replace(/P$/, '%');
+            artifactDetailInput.聖遺物ステータスサブ効果[toKey] = build[key];
+            if (build[key] > 0) prioritySubstatsDisabled = true;
         }
         artifactDetailInput.聖遺物優先するサブ効果Disabled = prioritySubstatsDisabled;
 
@@ -642,6 +651,10 @@ export async function loadRecommendation(characterInput: TCharacterInput, artifa
         Object.keys(build).filter(s => !キャラクター構成PROPERTY_MAP.has(s)).forEach(key => {
             conditionInput.conditionValues[key] = build[key];
         });
+
+        console.log('build', build);
+        console.log('聖遺物ステータスメイン効果', artifactDetailInput.聖遺物ステータスメイン効果);
+        console.log('聖遺物ステータスサブ効果', artifactDetailInput.聖遺物ステータスサブ効果);
     }
     catch (error) {
         console.error(characterInput, artifactDetailInput, conditionInput, build);

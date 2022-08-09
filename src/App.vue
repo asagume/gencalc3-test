@@ -435,6 +435,7 @@ export default defineComponent({
         recommendationListRea.length,
         ...makeRecommendationList(characterInputRea.characterMaster)
       );
+      console.log(recommendationListRea);
       const recommendation = recommendationListRea[0];
       await updateRecommendation(recommendation);
     };
