@@ -55,7 +55,7 @@
         </thead>
         <template v-if="categoryOpenClose[category]">
           <tr v-for="item in itemList(category)" :key="item[0]">
-            <th>{{ displayName(item[0]) }}</th>
+            <th v-if="item[6]" :rowspan="item[6]">{{ displayName(item[0]) }}</th>
             <td :class="'damage-value ' + elementClass(item[1])">
               {{ displayDamageValue(item, 2) }}
             </td>
@@ -72,10 +72,8 @@
         <thead>
           <tr @click="categoryOnClick(category)">
             <th>{{ displayName(category) }}</th>
-            <template v-for="(item, index) in itemList(category)" :key="item[0]">
-              <th v-if="name(category, index)" :colspan="colspan(category, index)">
-                {{ displayName(name(category, index)) }}
-              </th>
+            <template v-for="item, in itemList(category)" :key="item[0]">
+              <th v-if="item[6]" :colspan="item[6]">{{ displayName(item[0]) }}</th>
             </template>
           </tr>
         </thead>
@@ -116,8 +114,7 @@
   </div>
 </template>
 <script lang="ts">
-import GlobalMixin from "@/GlobalMixin.vue";
-import { TDamageResultEntry } from "@/input";
+import GlobalMixin from '@/GlobalMixin.vue';
 import { ELEMENT_COLOR_CLASS, TElementColorClassKey } from "@/master";
 import { defineComponent, reactive, ref } from "vue";
 
@@ -162,26 +159,27 @@ export default defineComponent({
       "その他",
     ];
     const itemList = (category: string) => {
-      return props.damageResult[category].filter((s: any[]) => !s[0].startsWith("非表示"));
-    };
-
-    const name = (category: string, index: number) => {
-      const item = itemList(category)[index];
-      if (index == 0) return item[0];
-      const preItem = itemList(category)[index - 1];
-      if (item[0] == preItem[0]) return null;
-      return item[0];
-    }
-
-    const colspan = (category: string, index: number) => {
-      let cols = 1;
-      const item = itemList(category)[index];
-      for (let i = index + 1; i < itemList(category).length; i++) {
-        const nextItem = itemList(category)[i];
-        if (item[0] == nextItem[0]) cols++;
-        else break;
+      const result = [] as any[];
+      const workList = props.damageResult[category].filter((s: any[]) => !s[0].startsWith("非表示"));
+      for (let i = 0; i < workList.length; i++) {
+        let span = 1;
+        if (i > 0 && workList[i][0] == workList[i - 1][0]) span = 0;
+        else {
+          span = workList.slice(i).filter((s: any) => s[0] == workList[i][0]).length;
+        }
+        result.push([...workList[i], span]);
       }
-      return cols;
+      return result;
+    };
+    const displayDamageValueH = (category: string, itemIndex: number, damageIndex: number) => {
+      const item = itemList(category)[itemIndex];
+      let result = displayDamageValue(item, damageIndex);
+      if (item[6] > 1) {
+        for (let i = 1; i < item[6]; i++) {
+          result += '/' + displayDamageValue(itemList(category)[itemIndex + i], damageIndex);
+        }
+      }
+      return result;
     }
 
     const categoryOpenClose = reactive({} as { [key: string]: boolean });
@@ -200,8 +198,7 @@ export default defineComponent({
       itemList,
       categoryOpenClose,
       categoryOnClick,
-      name,
-      colspan,
+      displayDamageValueH,
       resultStyleRef,
     };
   },

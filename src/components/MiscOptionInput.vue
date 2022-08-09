@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import GlobalMixin from "@/GlobalMixin.vue";
+import GlobalMixin from '@/GlobalMixin.vue';
 import {
   calculateFormulaArray,
   checkConditionMatches,

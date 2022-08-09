@@ -165,8 +165,8 @@ async function main() {
         artifactDetailInput: artifactDetailInput,
         conditionInput: conditionInput,
         recommendationList: recommendationList,
+        recommendation: recommendation,
     }).use(i18n).mount('#app')
 }
-
 
 main();

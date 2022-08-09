@@ -52,7 +52,7 @@ import {
   makeValidConditionValueArr,
 } from "@/calculate";
 import { deepcopy } from "@/common";
-import GlobalMixin from "@/GlobalMixin.vue";
+import GlobalMixin from '@/GlobalMixin.vue';
 import {
   ARTIFACT_DETAIL_INPUT_TEMPLATE,
   CHARACTER_INPUT_TEMPLATE,

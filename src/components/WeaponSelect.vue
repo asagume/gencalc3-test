@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { getStatValueByLevel } from "@/calculate";
-import GlobalMixin from "@/GlobalMixin.vue";
+import GlobalMixin from '@/GlobalMixin.vue';
 import {
   STAR_BACKGROUND_IMAGE_CLASS,
   TWeaponDetail,

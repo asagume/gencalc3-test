@@ -193,7 +193,7 @@
 </template>
 
 <script lang="ts">
-import GlobalMixin from "@/GlobalMixin.vue";
+import GlobalMixin from '@/GlobalMixin.vue';
 import {
   TArtifactDetailInput,
   聖遺物メイン効果_時の砂ARRAY,

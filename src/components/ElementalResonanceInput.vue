@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import GlobalMixin from "@/GlobalMixin.vue";
+import GlobalMixin from '@/GlobalMixin.vue';
 import { STAT_PERCENT_LIST, TStats } from "@/input";
 import { ELEMENTAL_RESONANCE_MASTER, ELEMENTAL_RESONANCE_MASTER_LIST } from "@/master";
 import { computed, defineComponent, PropType, reactive } from "vue";

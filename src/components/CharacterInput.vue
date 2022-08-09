@@ -166,7 +166,7 @@
 </template>
 
 <script lang="ts">
-import GlobalMixin from "@/GlobalMixin.vue";
+import GlobalMixin from '@/GlobalMixin.vue';
 import {
   ARTIFACT_SET_MASTER_DUMMY,
   TRecommendation,

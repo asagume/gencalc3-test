@@ -227,8 +227,6 @@ export const calculateStats = function (
     }
 
     const validConditionValueArr = makeValidConditionValueArr(conditionInput);
-    console.log('conditionInput', conditionInput);
-    console.log('validConditionValueArr', validConditionValueArr);
 
     // ステータス変化
     const myPriority1KindArr = ['元素チャージ効率'];    // 攻撃力の計算で参照するステータス 草薙の稲光
@@ -243,7 +241,6 @@ export const calculateStats = function (
                     const number = checkConditionMatches(myDetailObj['条件'], validConditionValueArr, constellation);
                     if (number == 0) continue;
                     if (number != 1) {
-                        console.log(myDetailObj, number);
                         myNew数値 = (myNew数値 as any).concat(['*', number]);
                     }
                 }
@@ -326,7 +323,6 @@ export const calculateStats = function (
     conditionInput.攻撃元素 = [通常攻撃_元素Var, 重撃_元素Var, 落下攻撃_元素Var];
 
     overwriteObject(statsInput.statsObj, workStatsObj);
-    console.log(statsInput.statsObj);
 }
 
 function compareFunction(a: string, b: string) {
@@ -512,7 +508,7 @@ export function calculateResult(damageResult: TDamageResult, characterInput: TCh
             });
         });
         overwriteObject(damageResult['元素反応'], reactionResult);
-        console.log('元素反応', damageResult);
+        console.debug('元素反応', damageResult);
 
         // 戦闘天賦およびその他のダメージを計算します
         const validConditionValueArr = makeValidConditionValueArr(conditionInput);
@@ -589,7 +585,7 @@ export function calculateResult(damageResult: TDamageResult, characterInput: TCh
         // 被ダメージを計算します
         // TODO
 
-        console.log(damageResult);
+        console.debug(damageResult);
     } catch (error) {
         console.error(error);
         throw error;

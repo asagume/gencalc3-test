@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import GlobalMixin from "@/GlobalMixin.vue";
+import GlobalMixin from '@/GlobalMixin.vue';
 import { TStatsInput, ステータスARRAY_MAP } from "@/input";
 import { defineComponent, PropType, reactive, ref } from "vue";
 

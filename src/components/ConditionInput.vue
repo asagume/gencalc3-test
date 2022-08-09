@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import GlobalMixin from "@/GlobalMixin.vue";
+import GlobalMixin from '@/GlobalMixin.vue';
 import { defineComponent, reactive } from "vue";
 
 export default defineComponent({

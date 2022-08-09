@@ -128,7 +128,7 @@
 <script lang="ts">
 import { getStatValueByLevel } from "@/calculate";
 import { isPlainObject } from "@/common";
-import GlobalMixin from "@/GlobalMixin.vue";
+import GlobalMixin from '@/GlobalMixin.vue';
 import { TCharacterDetail } from "@/master";
 import { computed, defineComponent, PropType } from "vue";
 

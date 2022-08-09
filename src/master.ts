@@ -325,7 +325,6 @@ export async function getCharacterMasterDetail(character: TCharacterKey): Promis
     try {
         if (!CHARACTER_MASTER_DETAIL_MAP.has(character)) {
             const url = CHARACTER_MASTER[character]['import'].replace(/^\//, '');
-            console.log(getCharacterMasterDetail.name, url);
             const characterMaster = await fetch(url).then(resp => resp.json());
             // removeStrFromUrl(characterMaster, '');
             CHARACTER_MASTER_DETAIL_MAP.set(character, characterMaster);
