@@ -42,7 +42,7 @@ export default function CompositionFunction() {
     const displayName = function (key: any): string {
         if (!key) return key;
         if (i18n.global.locale.value === 'ja-jp') { // 日本語はtranslateしません
-            return String(key).replace(/バフ$/, '');
+            return String(key).replace(/ダメージバフ$/, 'ダメージ');
         }
         if (te(key)) return t(key);
         const re = new RegExp('(.*?)([\\s_]+)(.*)');
