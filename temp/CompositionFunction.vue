@@ -40,8 +40,7 @@ export default function CompositionFunction() {
     const displayName = function (key: any): string {
         if (!key) return key;
         if (i18n.global.locale.value === 'ja-jp') { // 日本語はtranslateしません
-            if (String(key).endsWith('バフ')) return key.replace(/バフ$/, '');
-            return String(key);
+            return String(key).replace(/バフ$/, '');
         }
         if (te(key)) return t(key);
         const re = new RegExp('(.*?)([\\s_]+)(.*)');
@@ -62,7 +61,6 @@ export default function CompositionFunction() {
 
     const percent = function (stat: string) {
         if (stat.endsWith("%") || STAT_PERCENT_LIST.includes(stat)) return "%";
-        if (stat.endsWith("会心率") || stat.endsWith("会心ダメージ")) return "%";
         return "";
     }
 
