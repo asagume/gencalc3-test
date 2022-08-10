@@ -136,7 +136,7 @@
             }}</span>
           </td>
           <td colspan="2" style="border-color: transparent">
-            <label> 聖遺物詳細画面OCR </label>
+            <button type="button" @click="loadArtifactStatsByOcrOnClick"> {{ displayName('聖遺物詳細画面OCR') }} </button>
           </td>
         </tr>
       </table>
@@ -190,6 +190,9 @@
       </table>
     </fieldset>
   </div>
+  <div style="display: none">
+    <input type="file" id="artifact-stats-image" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -218,6 +221,7 @@ import {
 } from "@/master";
 import { computed, defineComponent, PropType, reactive, ref, watch } from "vue";
 import CompositionFunction from './CompositionFunction.vue';
+const resizePinnedImage = require('../gencalc_ocr.js');
 
 export default defineComponent({
   name: "ArtifactDetailInput",
@@ -352,6 +356,14 @@ export default defineComponent({
       context.emit("update:artifact-detail", artifactDetailInputRea);
     }
 
+    const loadArtifactStatsByOcr = async (event: Event) => {
+      resizePinnedImage(event);
+    }
+    document.getElementById('artifact-stats-image')?.addEventListener('click', loadArtifactStatsByOcr);
+    const loadArtifactStatsByOcrOnClick = async () => {
+      document.getElementById('artifact-stats-image')?.click();
+    }
+
     watch(
       mainstats,
       (newVal, oldVal) => {
@@ -423,6 +435,7 @@ export default defineComponent({
       updateMainstats,
       updatePrioritySubstats,
 
+      loadArtifactStatsByOcrOnClick,
       initializeArtifactStatsSub,
     };
   },
