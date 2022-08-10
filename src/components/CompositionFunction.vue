@@ -32,8 +32,10 @@ export default function CompositionFunction() {
     }
 
     const loadLocaleMessages = async function (locale: string) {
-        const messages = await fetch(`./locales/${locale}.json`).then(resp => resp.json());
-        i18n.global.setLocaleMessage(locale, messages);
+        if (locale != 'ja-jp') {
+            const messages = await fetch(`./locales/${locale}.json`).then(resp => resp.json());
+            i18n.global.setLocaleMessage(locale, messages);
+        }
         return nextTick();
     }
 

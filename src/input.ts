@@ -558,6 +558,8 @@ export async function loadRecommendation(
     conditionInput: TConditionInput,
     build: { [key: string]: any }
 ) {
+    console.log(loadRecommendation.name, build);
+
     try {
         const character = characterInput.character;
         const characterMaster = await getCharacterMasterDetail(character);

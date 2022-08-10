@@ -155,7 +155,7 @@
     </tr>
     <tr v-show="storageOrRecommendationRef == '1'">
       <td colspan="6">
-        <select v-model="selectedRecommendation" @change="$emit('update:recommendation', targetValue($event))">
+        <select v-model="selectedRecommendation" @change="recommendationOnChange($event)">
           <option v-for="item in recommendationList" :value="item" :key="item.name">
             {{ displayBuildName(item) }}
           </option>
@@ -238,7 +238,7 @@ export default defineComponent({
       ELEMENT_BG_COLOR_CLASS[item.元素] as string;
     let saveDisabled = false;
     let removeDisabled = false;
-    const buildnameRef = ref(props.recommendation?.name ?? "");
+    const buildnameRef = ref(props.recommendation.name);
     const saveOnClick = () => {
       if (buildnameRef.value) {
         console.log(buildnameRef.value);

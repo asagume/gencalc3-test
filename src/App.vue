@@ -289,6 +289,7 @@ export default defineComponent({
 
     // Englishの辞書データをロードします
     setI18nLanguage('en-us');
+    setI18nLanguage('ja-jp');
 
     // ステータス1, ステータス2, 敵
     const statsInput = reactive(deepcopy(STATS_INPUT_TEMPLATE) as TStatsInput);
