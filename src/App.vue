@@ -123,6 +123,8 @@
     </div>
     <div class="pane7">
       <AboutMyApp />
+      <ConfigurationInput @update:configuration-input="updateConfigurationInput"
+        @order:initialize-artifact-stats-sub="orderInitializeArtifactStatsSub" />
     </div>
     <hr />
     <div class="footer">
@@ -174,6 +176,7 @@ import TeamOptionInput from "@/components/TeamOptionInput.vue";
 import MiscOptionInput from "@/components/MiscOptionInput.vue";
 import DamageResult from "@/components/DamageResult.vue";
 import AboutMyApp from "@/components/AboutMyApp.vue";
+import ConfigurationInput from "@/components/ConfigurationInput.vue";
 import CharacterOwnList from "@/components/CharacterOwnList.vue";
 import WeaponOwnList from "@/components/WeaponOwnList.vue";
 import {
@@ -201,6 +204,7 @@ import {
   ENEMY_MASTER_LIST,
   getCharacterMasterDetail,
   getWeaponMasterDetail,
+  TAnyObject,
   TArtifactSet,
   TArtifactSetEntry,
   TArtifactSetKey,
@@ -215,14 +219,12 @@ import {
   calculateStats,
   makePrioritySubstatValueList,
 } from "@/calculate";
-import { useI18n } from "vue-i18n";
-import GlobalMixin from '@/GlobalMixin.vue';
 import { deepcopy, isPlainObject, overwriteObject } from "./common";
 import { calculateResult } from "./calculate";
+import CompositionFunction from "./components/CompositionFunction.vue";
 
 export default defineComponent({
   name: "App",
-  mixins: [GlobalMixin],
   props: {
     characterInput: { type: Object as PropType<TCharacterInput>, required: true },
     artifactDetailInput: {
@@ -254,14 +256,12 @@ export default defineComponent({
     MiscOptionInput,
     DamageResult,
     AboutMyApp,
+    ConfigurationInput,
     CharacterOwnList,
     WeaponOwnList,
   },
   setup(props) {
-    const { t } = useI18n({
-      inheritLocale: true,
-      useScope: "local",
-    });
+    const { setI18nLanguage, displayName } = CompositionFunction();
 
     const characterInputVmRef = ref();
     const artifactDetailInputVmRef = ref();
@@ -286,6 +286,9 @@ export default defineComponent({
 
     const characterInfoVisibleRef = ref(false);
     const characterInfoModeRef = ref(0);
+
+    // Englishの辞書データをロードします
+    setI18nLanguage('en-us');
 
     // ステータス1, ステータス2, 敵
     const statsInput = reactive(deepcopy(STATS_INPUT_TEMPLATE) as TStatsInput);
@@ -335,7 +338,7 @@ export default defineComponent({
     const ownListToggle1Ref = ref(false);
     const ownListToggle2Ref = ref(false);
 
-    /** 敵を更新します */
+    /** 敵が変更されました。ステータスおよびダメージを再計算します */
     const updateEnemy = () => {
       (statsInput.enemyMaster as any) = selectedEnemy.value;
       // ステータスを計算します
@@ -356,7 +359,7 @@ export default defineComponent({
     };
     updateEnemy();
 
-    /** おすすめセットを更新します */
+    /** おすすめセットを選択しました。もろもろのデータを再作成、ステータスおよびダメージを再計算します */
     const updateRecommendation = async (recommendation: TRecommendation) => {
       if (!characterInputRea || !artifactDetailInputRea || !conditionInputRea) return;
       await loadRecommendation(
@@ -418,7 +421,8 @@ export default defineComponent({
         statsInput
       );
     };
-    /** キャラクターを選択します */
+
+    /** キャラクターを選択しました。もろもろのデータを再作成、ステータスおよびダメージを再計算します */
     const updateCharacter = async function (character: TCharacterKey) {
       if (
         !characterInputRea ||
@@ -435,10 +439,10 @@ export default defineComponent({
         recommendationListRea.length,
         ...makeRecommendationList(characterInputRea.characterMaster)
       );
-      console.log(recommendationListRea);
       const recommendation = recommendationListRea[0];
       await updateRecommendation(recommendation);
     };
+
     // キャラクターのパラメータ（突破レベル、レベル、命ノ星座、通常攻撃レベル、元素スキルレベル、元素爆発レベル）を更新します
     const updateCharacterInputCharacter = (characterInput: any) => {
       if (!characterInputRea) return;
@@ -464,6 +468,7 @@ export default defineComponent({
         statsInput
       );
     };
+
     // 武器選択画面を開きます/閉じます
     const openWeaponSelect = () => {
       weaponSelectVisibleRef.value = !weaponSelectVisibleRef.value;
@@ -473,6 +478,7 @@ export default defineComponent({
         characterInfoVisibleRef.value = false;
       }
     };
+
     /** 武器を選択しました */
     const updateWeapon = async (weapon: TWeaponKey) => {
       if (!characterInputRea) return;
@@ -499,6 +505,7 @@ export default defineComponent({
         statsInput
       );
     };
+
     // 武器のパラメータ（突破レベル、レベル、精錬ランク）を更新します
     const updateCharacterInputWeapon = (characterInput: any) => {
       Object.keys(characterInput).forEach((key) => {
@@ -523,6 +530,7 @@ export default defineComponent({
         statsInput
       );
     };
+
     // 聖遺物セット効果選択画面を開きます/閉じます
     const openArtifactSetSelect = (index: number) => {
       if (index == artifactSetIndexRef.value) {
@@ -537,6 +545,7 @@ export default defineComponent({
         characterInfoVisibleRef.value = false;
       }
     };
+
     /** 聖遺物セット効果を選択しました */
     const updateArtifactSet = (artifactSet: TArtifactSetKey) => {
       if (!characterInputRea) return;
@@ -565,6 +574,7 @@ export default defineComponent({
         statsInput
       );
     };
+
     // 聖遺物詳細画面を開きます/閉じます
     const openArtifactDetailInput = () => {
       artifactDetailInputVisibleRef.value = !artifactDetailInputVisibleRef.value;
@@ -574,7 +584,8 @@ export default defineComponent({
         characterInfoVisibleRef.value = false;
       }
     };
-    // 聖遺物ステータスを更新しました
+
+    // 聖遺物ステータスが変更されました。ステータスおよびダメージを再計算します
     const updateArtifactDetail = (artifactDetailInput: TArtifactDetailInput) => {
       if (!artifactDetailInputRea) return;
       for (const stat of Object.keys(artifactDetailInput.聖遺物ステータス)) {
@@ -590,6 +601,7 @@ export default defineComponent({
       );
       calculateResult(damageResult, characterInputRea, conditionInputRea, statsInput);
     };
+
     /** キャラクター情報を開きます */
     const openCharacterInfo = (mode: number) => {
       console.log(mode, characterInfoModeRef.value, characterInfoVisibleRef.value);
@@ -606,9 +618,8 @@ export default defineComponent({
       }
     };
 
-    // オプション条件を更新します
+    // オプション条件が変更されました。ステータスおよびダメージを再計算します
     const updateCondition = () => {
-      console.log(conditionInputRea.conditionValues);
       calculateStats(
         statsInput,
         characterInputRea,
@@ -646,6 +657,8 @@ export default defineComponent({
       }
       return undefined;
     };
+
+    /** ステータス補正値が変更されました。ステータスおよびダメージを再計算します */
     const updateStatAdjustments = (argStatAdjustments: any) => {
       Object.keys(argStatAdjustments).forEach((key) => {
         statsInput.statAdjustments[key] = argStatAdjustments[key];
@@ -664,7 +677,8 @@ export default defineComponent({
         statsInput
       );
     };
-    /** 元素共鳴を更新しました */
+
+    /** 元素共鳴が変更されました。ステータスおよびダメージを再計算します */
     const updateElementalResonance = (statAdjustments: TStats) => {
       overwriteObject(optionInputRea.elementalResonanceStatAdjustments, statAdjustments);
       calculateStats(
@@ -682,6 +696,7 @@ export default defineComponent({
       );
     };
 
+    /** その他オプションが変更されました。ステータスおよびダメージを再計算します */
     const updateMiscOption = (statAdjustments: TStats) => {
       overwriteObject(optionInputRea.miscOptionStatAdjustments, statAdjustments);
       calculateStats(
@@ -699,6 +714,7 @@ export default defineComponent({
       );
     };
 
+    /** チームオプションが変更されました。ステータスおよびダメージを再計算します */
     const updateTeamOption = (statAdjustments: TStats) => {
       overwriteObject(optionInputRea.teamOptionStatAdjustments, statAdjustments);
       console.log(statAdjustments);
@@ -717,10 +733,27 @@ export default defineComponent({
       );
     };
 
+    /** コンフィグレーションが変更されました */
+    const updateConfigurationInput = (configurationInput: TAnyObject) => {
+      console.log(configurationInput);
+      if ('全武器解放' in configurationInput && configurationInput.全武器解放) {
+        console.log('全武器解放');
+      }
+      if ('聖遺物サブ効果計算停止' in configurationInput && configurationInput.聖遺物サブ効果計算停止) {
+        artifactDetailInputRea.聖遺物優先するサブ効果Disabled = true;
+      }
+    }
+
+    /** 聖遺物ステータス（サブ効果）をクリアします*/
+    const orderInitializeArtifactStatsSub = () => {
+      artifactDetailInputVmRef.value.initializeArtifactStatsSub();
+    }
+
     updateCharacter(character);
 
     return {
-      t,
+      displayName,
+
       characterInputVmRef,
       artifactDetailInputVmRef,
       conditionInputVmRef,
@@ -776,6 +809,9 @@ export default defineComponent({
       updateElementalResonance,
       updateMiscOption,
       updateTeamOption,
+
+      updateConfigurationInput,
+      orderInitializeArtifactStatsSub,
 
       myDamageDatailArr,
       objectKeys,

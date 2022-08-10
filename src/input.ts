@@ -1,5 +1,5 @@
 import { ARTIFACT_SET_MASTER, DAMAGE_CATEGORY_ARRAY, ENEMY_MASTER_LIST, getCharacterMasterDetail, getWeaponMasterDetail, IMG_SRC_DUMMY, RECOMMEND_ABBREV_MAP, TArtifactSet, TArtifactSetEntry, TArtifactSetKey, TCharacterDetail, TCharacterKey, TEnemyEntry, TWeaponDetail, TWeaponKey, キャラクター構成PROPERTY_MAP } from '@/master';
-import { deepcopy, isNumber, isPlainObject, isString } from './common';
+import { deepcopy, isNumber, isPlainObject, isString, overwriteObject } from './common';
 
 export const 基礎ステータスARRAY = [
     '基礎HP',
@@ -417,11 +417,7 @@ export const SUPPORTER_INPUT_TEMPLATE = {
 };
 export type TSupporterInput = typeof SUPPORTER_INPUT_TEMPLATE;
 
-/**
- * 
- * @param {string} levelStr 
- * @returns {[number, number]}
- */
+/** レベル文字列（1+,20,20+,...,90）を突破レベルとレベルに分割します */
 export function parseLevelStr(levelStr: number | string): [number, number] {
     try {
         let level: number;
@@ -453,12 +449,7 @@ export type TRecommendation = {
     overwrite: boolean
 }
 
-/**
- * おすすめセットのリストを作成します.
- * 
- * @param {Object} characterMaster キャラクターマスター
- * @returns {[string, object, boolean][]} おすすめセットのリスト
- */
+/** おすすめセットのリストを作成します. [おすすめセットの名前, おすすめセットの内容, 上書き可不可][] */
 export function makeRecommendationList(characterMaster: { [key: string]: any }, opt_buildData?: { [key: string]: any }): TRecommendation[] {
     const result: TRecommendation[] = [];
 
@@ -545,12 +536,7 @@ export function makeRecommendationList(characterMaster: { [key: string]: any }, 
     return result;
 }
 
-/**
- * 聖遺物セット名の略称を作成します
- * 
- * @param {string} name 聖遺物セット名
- * @returns {string} 聖遺物セット名の略称
- */
+/** 聖遺物セット名の略称を作成します */
 function makeArtifactSetAbbrev(name: string): string {
     const abbrRe = /[\p{sc=Hiragana}\p{sc=Katakana}ー]+/ug;
     let abbr = name.replace(abbrRe, '');
@@ -565,6 +551,7 @@ function makeArtifactSetAbbrev(name: string): string {
     return abbr;
 }
 
+/** おすすめセットをロードします */
 export async function loadRecommendation(
     characterInput: TCharacterInput,
     artifactDetailInput: TArtifactDetailInput,
@@ -575,6 +562,8 @@ export async function loadRecommendation(
         const character = characterInput.character;
         const characterMaster = await getCharacterMasterDetail(character);
         characterInput.characterMaster = characterMaster;
+        const artifactStatsMain = deepcopy(聖遺物ステータスTEMPLATE);
+        const artifactStatsSub = deepcopy(聖遺物ステータスTEMPLATE);
 
         if ('レベル' in build) {
             [characterInput.突破レベル, characterInput.レベル] = parseLevelStr(build['レベル']);
@@ -601,10 +590,13 @@ export async function loadRecommendation(
         for (const key of Object.keys(build).filter((s: string) => s.startsWith('聖遺物サブ効果'))) {
             let toKey = key.replace(/^聖遺物サブ効果/, '');
             if (toKey != 'HP') toKey = toKey.replace(/P$/, '%');
-            artifactDetailInput.聖遺物ステータスサブ効果[toKey] = build[key];
-            if (build[key] > 0) prioritySubstatsDisabled = true;
+            if (build[key]) {
+                prioritySubstatsDisabled = true;
+                artifactStatsSub[toKey] = Number(build[key]);
+            }
         }
         artifactDetailInput.聖遺物優先するサブ効果Disabled = prioritySubstatsDisabled;
+        overwriteObject(artifactDetailInput.聖遺物ステータスサブ効果, artifactStatsSub);
 
         ['聖遺物セット効果1', '聖遺物セット効果2'].forEach((key, index) => {
             if (!(key in build)) return;
@@ -616,6 +608,7 @@ export async function loadRecommendation(
                 characterInput.artifactSetMasters[index] = ARTIFACT_SET_MASTER_DUMMY as TArtifactSetEntry;
             }
         });
+
         ['聖遺物メイン効果1', '聖遺物メイン効果2'].forEach((key, index) => {
             if (key in build) {
                 let mainstat = build[key];
@@ -632,6 +625,12 @@ export async function loadRecommendation(
             const mainstat = build[key];
             artifactDetailInput['聖遺物メイン効果'][index + 2] = mainstat;
         });
+        // for (const entry of artifactDetailInput['聖遺物メイン効果']) {
+        //     const [rarity, stat] = entry.split('_');
+        //     artifactStatsMain[stat] += (ARTIFACT_MAIN_MASTER as any)[rarity][stat];
+        // }
+        // overwriteObject(artifactDetailInput.聖遺物ステータスメイン効果, artifactStatsMain);
+
         ['聖遺物優先するサブ効果1', '聖遺物優先するサブ効果2', '聖遺物優先するサブ効果3'].forEach((key, index) => {
             if (!(key in build)) return;
             const substat = build[key];
@@ -653,8 +652,8 @@ export async function loadRecommendation(
         });
 
         console.log('build', build);
-        console.log('聖遺物ステータスメイン効果', artifactDetailInput.聖遺物ステータスメイン効果);
-        console.log('聖遺物ステータスサブ効果', artifactDetailInput.聖遺物ステータスサブ効果);
+        console.log('聖遺物ステータスメイン効果', artifactDetailInput.聖遺物ステータスメイン効果, artifactStatsMain);
+        console.log('聖遺物ステータスサブ効果', artifactDetailInput.聖遺物ステータスサブ効果, artifactStatsSub);
     }
     catch (error) {
         console.error(characterInput, artifactDetailInput, conditionInput, build);

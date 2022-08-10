@@ -37,14 +37,27 @@
     </fieldset>
 </template>
 <script lang="ts">
-import GlobalMixin from '@/GlobalMixin.vue';
 import { defineComponent } from "vue";
+import { useI18n } from 'vue-i18n';
+import CompositionFunction from './CompositionFunction.vue';
 
 export default defineComponent({
     name: "TitleAndHeader",
-    mixins: [GlobalMixin],
     setup() {
+        const { locale } = useI18n({
+            useScope: "global",
+        });
+        const { localeList, setI18nLanguage, displayName, targetValue } = CompositionFunction();
+
+        const localeOnChange = (locale: string | undefined) => {
+            if (locale) setI18nLanguage(locale);
+        }
+
         return {
+            locale,
+            localeList, displayName, targetValue,
+            localeOnChange,
+
             version: require('../../package.json').version,
         }
     }

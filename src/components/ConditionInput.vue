@@ -17,24 +17,27 @@
 </template>
 
 <script lang="ts">
-import GlobalMixin from '@/GlobalMixin.vue';
 import { defineComponent, reactive } from "vue";
+import CompositionFunction from './CompositionFunction.vue';
 
 export default defineComponent({
   name: "ConditionInput",
-  mixins: [GlobalMixin],
   props: {
     characterInput: { type: Object, required: true },
     conditionInput: { type: Object, required: true },
   },
   emits: ["update:condition"],
   setup(props) {
+    const { displayName, displayOptionName } = CompositionFunction();
+
     const conditionInputRea = reactive(props.conditionInput);
     const conditionValues = conditionInputRea.conditionValues;
     const checkboxList = conditionInputRea.checkboxList;
     const selectList = conditionInputRea.selectList;
 
     return {
+      displayName, displayOptionName,
+
       checkboxList,
       selectList,
       conditionValues,

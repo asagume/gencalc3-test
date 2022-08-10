@@ -22,17 +22,16 @@
 </template>
 
 <script lang="ts">
-import GlobalMixin from '@/GlobalMixin.vue';
 import {
   ARTIFACT_SET_MASTER_LIST,
   STAR_BACKGROUND_IMAGE_CLASS,
   TArtifactSetEntry,
 } from "@/master";
 import { computed, defineComponent, PropType, reactive } from "vue";
+import CompositionFunction from './CompositionFunction.vue';
 
 export default defineComponent({
   name: "ArtifactSetSelect",
-  mixins: [GlobalMixin],
   props: {
     visible: { type: Boolean, required: true },
     index: { type: Number, required: true },
@@ -41,6 +40,8 @@ export default defineComponent({
   },
   emits: ["update:artifact-set"],
   setup(props) {
+    const { displayName } = CompositionFunction();
+
     const bgImageClass = (item: TArtifactSetEntry) =>
       (" " + STAR_BACKGROUND_IMAGE_CLASS[item.レアリティ]) as string;
     const selectedClass = (item: TArtifactSetEntry) => {
@@ -83,6 +84,8 @@ export default defineComponent({
     });
 
     return {
+      displayName,
+
       bgImageClass,
       selectedClass,
       filteredList,

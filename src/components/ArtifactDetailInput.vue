@@ -136,7 +136,7 @@
             }}</span>
           </td>
           <td colspan="2" style="border-color: transparent">
-            <label> 聖遺物詳細画面OCR </label>
+            <button type="button" @click="loadArtifactStatsByOcrOnClick"> {{ displayName('聖遺物詳細画面OCR') }} </button>
           </td>
         </tr>
       </table>
@@ -148,7 +148,7 @@
           <th>{{ displayName("優先するサブ効果") }}</th>
           <th>{{ displayName("上昇値") }}</th>
           <th>{{ displayName("初期+強化") }}</th>
-          <td style="border-color: transparent">合計 {{}} 回</td>
+          <td style="border-color: transparent">合計 {{ upTotalCount }} 回</td>
         </tr>
         <tr v-for="i in [0, 1, 2]" :key="i">
           <td>
@@ -190,10 +190,12 @@
       </table>
     </fieldset>
   </div>
+  <div style="display: none">
+    <input type="file" id="artifact-stats-image" />
+  </div>
 </template>
 
 <script lang="ts">
-import GlobalMixin from '@/GlobalMixin.vue';
 import {
   TArtifactDetailInput,
   聖遺物メイン効果_時の砂ARRAY,
@@ -218,16 +220,19 @@ import {
   TGensen,
 } from "@/master";
 import { computed, defineComponent, PropType, reactive, ref, watch } from "vue";
+import CompositionFunction from './CompositionFunction.vue';
+const resizePinnedImage = require('../gencalc_ocr.js');
 
 export default defineComponent({
   name: "ArtifactDetailInput",
-  mixins: [GlobalMixin],
   props: {
     visible: Boolean,
     artifactDetailInput: { type: Object as PropType<TArtifactDetailInput>, required: true },
   },
   emits: ["update:artifact-detail"],
   setup(props, context) {
+    const { displayName, targetValue, displayStatValue } = CompositionFunction();
+
     const artifactDetailInputRea = reactive(props.artifactDetailInput);
 
     const mainstats = reactive(artifactDetailInputRea.聖遺物メイン効果);
@@ -268,7 +273,7 @@ export default defineComponent({
     const _calculateArtifactStatsMain = () => {
       calculateArtifactStatsMain(artifactStatsMain, mainstats);
     };
-    /** 聖遺物ステータスを計算します（サブ効果） */
+    /** 聖遺物ステータスを計算します（優先するサブ効果） */
     const _calculateArtifactStatsPrioritySub = () => {
       if (prioritySubstatsDisabledRef.value) return;
       const prioritySubstatValues = [
@@ -318,8 +323,10 @@ export default defineComponent({
       calculateArtifactStats(artifactDetailInputRea);
       context.emit("update:artifact-detail", artifactDetailInputRea);
     };
+
     /** 厳選目安が選択されました */
     const gensenOnChange = () => {
+      prioritySubstatsDisabledRef.value = false;
       gensenEnabledRef.value = false;
       if (!gensenRef.value) return;
       if (!gensenRef.value.key) return;
@@ -338,6 +345,24 @@ export default defineComponent({
       calculateArtifactStats(artifactDetailInputRea);
       context.emit("update:artifact-detail", artifactDetailInputRea);
     };
+
+    /** 聖遺物ステータスサブ効果をクリアします */
+    const initializeArtifactStatsSub = () => {
+      prioritySubstatsDisabledRef.value = true;
+      for (const stat of Object.keys(artifactStatsSub)) {
+        artifactStatsSub[stat] = 0;
+      }
+      calculateArtifactStats(artifactDetailInputRea);
+      context.emit("update:artifact-detail", artifactDetailInputRea);
+    }
+
+    const loadArtifactStatsByOcr = async (event: Event) => {
+      resizePinnedImage(event);
+    }
+    document.getElementById('artifact-stats-image')?.addEventListener('click', loadArtifactStatsByOcr);
+    const loadArtifactStatsByOcrOnClick = async () => {
+      document.getElementById('artifact-stats-image')?.click();
+    }
 
     watch(
       mainstats,
@@ -361,6 +386,7 @@ export default defineComponent({
     watch(
       [prioritySubstats, prioritySubstatIndices, prioritySubstatCounts],
       ([newVal, newValuesVal, newCountsVal], [oldVal, oldValuesVal, oldCountsVal]) => {
+        if (prioritySubstatsDisabledRef.value) return;
         for (let i = 0; i < 3; i++) {
           if (!oldVal || !oldValuesVal || !oldCountsVal) continue;
           const stat = oldVal[i] as TArtifactSubKey;
@@ -381,6 +407,8 @@ export default defineComponent({
     );
 
     return {
+      displayName, targetValue, displayStatValue,
+
       mainstat1List: 聖遺物メイン効果_生の花ARRAY,
       mainstat2List: 聖遺物メイン効果_死の羽ARRAY,
       mainstat3List: 聖遺物メイン効果_時の砂ARRAY,
@@ -406,6 +434,9 @@ export default defineComponent({
       artifactStatsOnChange,
       updateMainstats,
       updatePrioritySubstats,
+
+      loadArtifactStatsByOcrOnClick,
+      initializeArtifactStatsSub,
     };
   },
 });

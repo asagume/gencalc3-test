@@ -52,7 +52,6 @@ import {
   makeValidConditionValueArr,
 } from "@/calculate";
 import { deepcopy } from "@/common";
-import GlobalMixin from '@/GlobalMixin.vue';
 import {
   ARTIFACT_DETAIL_INPUT_TEMPLATE,
   CHARACTER_INPUT_TEMPLATE,
@@ -80,15 +79,17 @@ import {
 } from "@/input";
 import { getCharacterMasterDetail, TCharacterKey, TEAM_OPTION_MASTER_LIST } from "@/master";
 import { computed, defineComponent, PropType, reactive, watch } from "vue";
+import CompositionFunction from "./CompositionFunction.vue";
 
 export default defineComponent({
   name: "TeamOptionInput",
-  mixins: [GlobalMixin],
   props: {
     savedSupporters: { type: Object as PropType<{ key: string; value: string }[]>, required: true },
   },
   emits: ["update:team-option"],
   setup(props, context) {
+    const { displayName, displayOptionName } = CompositionFunction();
+
     const savedSupportersRea = reactive(props.savedSupporters);
     const supporterKeyList = reactive([] as string[]);
     const supporterOpenClose = reactive({} as { [key: string]: boolean });
@@ -345,6 +346,8 @@ export default defineComponent({
     };
 
     return {
+      displayName, displayOptionName,
+
       supporterKeyList,
       supporterCheckboxList,
       supporterSelectList,

@@ -128,9 +128,9 @@
 <script lang="ts">
 import { getStatValueByLevel } from "@/calculate";
 import { isPlainObject } from "@/common";
-import GlobalMixin from '@/GlobalMixin.vue';
 import { TCharacterDetail } from "@/master";
 import { computed, defineComponent, PropType } from "vue";
+import CompositionFunction from "./CompositionFunction.vue";
 
 type TConstellationInfo = {
   名前: string;
@@ -148,7 +148,6 @@ type TTalentInfo = {
 
 export default defineComponent({
   name: "CharacterInfo",
-  mixins: [GlobalMixin],
   props: {
     visible: {
       type: Boolean,
@@ -184,6 +183,8 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const { displayName, displayStatValue } = CompositionFunction();
+
     const statsInfoList = computed((): any[] => {
       const result = [] as any[];
       if ("ステータス" in props.characterMaster) {
@@ -224,6 +225,8 @@ export default defineComponent({
     };
 
     return {
+      displayName, displayStatValue,
+
       statsInfoList,
       constellationInfoList,
       passiveTalentInfoList,

@@ -39,10 +39,10 @@
     </ul>
   </div>
 </template>
+displayName
 
 <script lang="ts">
 import { getStatValueByLevel } from "@/calculate";
-import GlobalMixin from '@/GlobalMixin.vue';
 import {
   STAR_BACKGROUND_IMAGE_CLASS,
   TWeaponDetail,
@@ -52,10 +52,10 @@ import {
   WEAPON_MASTER_LIST,
 } from "@/master";
 import { defineComponent, computed, ref, PropType } from "vue";
+import CompositionFunction from "./CompositionFunction.vue";
 
 export default defineComponent({
   name: "WeaponSelect",
-  mixins: [GlobalMixin],
   props: {
     visible: { type: Boolean, required: true },
     weapon: { type: String as PropType<TWeaponKey>, required: true },
@@ -66,6 +66,8 @@ export default defineComponent({
   },
   emits: ["update:weapon"],
   setup(props, context) {
+    const { displayName, displayStatValue } = CompositionFunction();
+
     const bgImageClass = (item: TWeaponEntry) =>
       (" " + STAR_BACKGROUND_IMAGE_CLASS[item.レアリティ]) as string;
     const selectedClass = (item: TWeaponEntry) => {
@@ -115,6 +117,8 @@ export default defineComponent({
     };
 
     return {
+      displayName, displayStatValue,
+
       bgImageClass,
       selectedClass,
       weaponMasterRef,

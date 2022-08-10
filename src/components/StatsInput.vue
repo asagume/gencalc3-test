@@ -38,19 +38,20 @@
 </template>
 
 <script lang="ts">
-import GlobalMixin from '@/GlobalMixin.vue';
 import { TStatsInput, ステータスARRAY_MAP } from "@/input";
 import { defineComponent, PropType, reactive, ref } from "vue";
+import CompositionFunction from './CompositionFunction.vue';
 
 export default defineComponent({
   name: "StatsInput",
-  mixins: [GlobalMixin],
   props: {
     statsInput: { type: Object as PropType<TStatsInput>, required: true },
     categoryList: { type: Array as PropType<Array<string>>, required: true },
   },
   emits: ["update:stat-adjustments"],
   setup(props, context) {
+    const { displayName, displayStatValue } = CompositionFunction();
+
     const statsInputRea = reactive(props.statsInput);
 
     const editable = ref(false);
@@ -93,6 +94,8 @@ export default defineComponent({
     initializeAdjustments();
 
     return {
+      displayName, displayStatValue,
+
       statList,
       visibleStatList,
       statsObj,

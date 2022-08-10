@@ -114,13 +114,12 @@
   </div>
 </template>
 <script lang="ts">
-import GlobalMixin from '@/GlobalMixin.vue';
 import { ELEMENT_COLOR_CLASS, TElementColorClassKey } from "@/master";
 import { defineComponent, reactive, ref } from "vue";
+import CompositionFunction from './CompositionFunction.vue';
 
 export default defineComponent({
   name: "DamageResult",
-  mixins: [GlobalMixin],
   props: {
     damageResult: {
       type: Object,
@@ -128,6 +127,8 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const { displayName } = CompositionFunction();
+
     const 元素反応 = reactive(props.damageResult.元素反応);
     const 増幅反応 = ref("なし");
     const elementClass = (item: string) =>
@@ -190,6 +191,8 @@ export default defineComponent({
     };
 
     return {
+      displayName,
+
       元素反応,
       増幅反応,
       elementClass,

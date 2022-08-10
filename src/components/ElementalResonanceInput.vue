@@ -12,14 +12,13 @@
 </template>
 
 <script lang="ts">
-import GlobalMixin from '@/GlobalMixin.vue';
 import { STAT_PERCENT_LIST, TStats } from "@/input";
 import { ELEMENTAL_RESONANCE_MASTER, ELEMENTAL_RESONANCE_MASTER_LIST } from "@/master";
 import { computed, defineComponent, PropType, reactive } from "vue";
+import CompositionFunction from './CompositionFunction.vue';
 
 export default defineComponent({
   name: "ElementalResonanceInput",
-  mixins: [GlobalMixin],
   emits: ["update:elemental-resonance"],
   props: {
     elementalResonanceChecked: {
@@ -28,6 +27,8 @@ export default defineComponent({
     },
   },
   setup(props, context) {
+    const { displayName } = CompositionFunction();
+
     const elementalResonanceList = ELEMENTAL_RESONANCE_MASTER_LIST;
     const elementalResonanceCheckedRea = reactive(props.elementalResonanceChecked);
 
@@ -89,6 +90,8 @@ export default defineComponent({
     };
 
     return {
+      displayName,
+
       elementalResonanceList,
       elementalResonanceCheckedRea,
       onChange,

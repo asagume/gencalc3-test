@@ -100,10 +100,6 @@ const GlobalMixin = {
     };
   },
   methods: {
-    displayName(name: string | number): string {
-      // return i18n.global.t(String(name));
-      return String(name);
-    },
     percent(stat: string) {
       if (stat.endsWith("%") || STAT_PERCENT_LIST.includes(stat)) return "%";
       if (stat.endsWith("会心率") || stat.endsWith("会心ダメージ")) return "%";

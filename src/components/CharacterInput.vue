@@ -166,7 +166,6 @@
 </template>
 
 <script lang="ts">
-import GlobalMixin from '@/GlobalMixin.vue';
 import {
   ARTIFACT_SET_MASTER_DUMMY,
   TRecommendation,
@@ -181,10 +180,10 @@ import {
   TCharacterDetail,
 } from "@/master";
 import { computed, defineComponent, PropType, ref } from "vue";
+import CompositionFunction from './CompositionFunction.vue';
 
 export default defineComponent({
   name: "CharacterInput",
-  mixins: [GlobalMixin],
   props: {
     characterInput: { type: Object, required: true },
     recommendationList: { type: Array as PropType<TRecommendation[]>, required: true },
@@ -203,6 +202,8 @@ export default defineComponent({
     "open:character-info",
   ],
   setup(props, context) {
+    const { displayName, targetValue } = CompositionFunction();
+
     const ascensionRef = ref(props.characterInput.突破レベル);
     const levelRef = ref(props.characterInput.レベル);
     const constellationRef = ref(props.characterInput.命ノ星座);
@@ -336,6 +337,8 @@ export default defineComponent({
     };
 
     return {
+      displayName, targetValue,
+
       displayBuildName,
       visionSrc,
       bgImageClass,
