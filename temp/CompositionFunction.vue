@@ -21,7 +21,7 @@ export default function CompositionFunction() {
         { name: "Indonesia", value: "id-id" },
         { name: "Português", value: "pt-pt" },
         { name: "Pусский", value: "ru-ru" },
-        // { name: 'ภาษาไทย', value: 'th-th' },
+        { name: 'ภาษาไทย', value: 'th-th' },
         { name: "Tiếng Việt", value: "vi-vn" },
     ];
 
@@ -38,6 +38,11 @@ export default function CompositionFunction() {
     }
 
     const displayName = function (key: any): string {
+        if (!key) return key;
+        if (i18n.global.locale.value === 'ja-jp') { // 日本語はtranslateしません
+            if (String(key).endsWith('バフ')) return key.replace(/バフ$/, '');
+            return String(key);
+        }
         if (te(key)) return t(key);
         const re = new RegExp('(.*?)([\\s_]+)(.*)');
         let result = '';

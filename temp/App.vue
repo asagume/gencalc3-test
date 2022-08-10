@@ -287,8 +287,8 @@ export default defineComponent({
     const characterInfoVisibleRef = ref(false);
     const characterInfoModeRef = ref(0);
 
-    // 日本語の辞書データをロードします
-    setI18nLanguage('ja-jp');
+    // Englishの辞書データをロードします
+    setI18nLanguage('en-us');
 
     // ステータス1, ステータス2, 敵
     const statsInput = reactive(deepcopy(STATS_INPUT_TEMPLATE) as TStatsInput);
