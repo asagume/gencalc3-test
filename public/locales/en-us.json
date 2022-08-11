@@ -1552,5 +1552,11 @@
     "防御力+": "DEF+",
     "ダメージバフ": "DMG Bonus",
     "実数ダメージ加算": "Flat DMG Bonus",
-    "元素反応バフ": "Elemental Reaction Bonus"
+    "元素反応バフ": "Elemental Reaction Bonus",
+    "第1重": "C1",
+    "第2重": "C2",
+    "第3重": "C3",
+    "第4重": "C4",
+    "第5重": "C5",
+    "第6重": "C6"
 }
