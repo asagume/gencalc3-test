@@ -9,7 +9,7 @@
     </div>
     <div class="pane3" style="margin-bottom: 15px">
       <CharacterInput ref="characterInputVmRef" :characterInput="characterInputRea"
-        :recommendationList="recommendationList" :recommendation="recommendation"
+        :recommendationList="recommendationListRea" :recommendation="recommendationRef"
         :artifactSetSelectVisible="artifactSetSelectVisibleRef"
         @open:character-select="characterSelectVisibleRef = !characterSelectVisibleRef"
         @update:recommendation="updateRecommendation($event)" @open:weapon-select="openWeaponSelect"
@@ -244,7 +244,7 @@ export default defineComponent({
       required: true,
     },
     urldata: {
-      type: Object as PropType<TRecommendation>,
+      type: Object as PropType<TAnyObject>,
     },
   },
   components: {
@@ -277,6 +277,7 @@ export default defineComponent({
     const artifactDetailInputRea = reactive(overwriteObject(deepcopy(ARTIFACT_DETAIL_INPUT_TEMPLATE), props.artifactDetailInput));
     const conditionInputRea = reactive(overwriteObject(deepcopy(CONDITION_INPUT_TEMPLATE), props.conditionInput));
     const recommendationListRea = reactive([...props.recommendationList]);
+    const recommendationRef = ref(props.recommendation);
 
     const characterSelectVisibleRef = ref(false);
     const character = characterInputRea.character;
@@ -443,14 +444,15 @@ export default defineComponent({
       characterSelectVisibleRef.value = false;
       characterInputRea.character = character;
       characterInputRea.characterMaster = await getCharacterMasterDetail(character);
+      let opt_buildData;
+      if (props.urldata && props.urldata.キャラクター == character) opt_buildData = props.urldata;
       recommendationListRea.splice(
         0,
         recommendationListRea.length,
-        ...makeRecommendationList(characterInputRea.characterMaster, props.urldata)
+        ...makeRecommendationList(characterInputRea.characterMaster, opt_buildData)
       );
-      const recommendation = recommendationListRea[0];
-      await updateRecommendation(recommendation);
-      console.log(recommendationListRea);
+      recommendationRef.value = recommendationListRea[0];
+      await updateRecommendation(recommendationRef.value);
     };
 
     // キャラクターのパラメータ（突破レベル、レベル、命ノ星座、通常攻撃レベル、元素スキルレベル、元素爆発レベル）を更新します
@@ -772,6 +774,7 @@ export default defineComponent({
       artifactDetailInputRea,
       conditionInputRea,
       recommendationListRea,
+      recommendationRef,
 
       characterSelectVisibleRef,
       character,
