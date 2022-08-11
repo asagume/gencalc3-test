@@ -613,13 +613,9 @@ export async function loadRecommendation(
 
         ['聖遺物メイン効果1', '聖遺物メイン効果2'].forEach((key, index) => {
             if (key in build) {
-                let mainstat = build[key];
-                if (!mainstat) {
-                    mainstat = ['5_HP', '5_攻撃力'][index];
-                }
-                artifactDetailInput['聖遺物メイン効果'][index] = mainstat;
+                artifactDetailInput['聖遺物メイン効果'][index] = build[key];
             } else {
-                artifactDetailInput['聖遺物メイン効果'][index] = '';
+                artifactDetailInput['聖遺物メイン効果'][index] = ['5_HP', '5_攻撃力'][index];
             }
         });
         ['聖遺物メイン効果3', '聖遺物メイン効果4', '聖遺物メイン効果5'].forEach((key, index) => {
