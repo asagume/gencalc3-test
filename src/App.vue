@@ -197,6 +197,9 @@ import {
   TOptionInput,
   TStatsInput,
   TStats,
+  CHARACTER_INPUT_TEMPLATE,
+  ARTIFACT_DETAIL_INPUT_TEMPLATE,
+  CONDITION_INPUT_TEMPLATE,
 } from "@/input";
 import {
   ARTIFACT_SET_MASTER,
@@ -239,7 +242,10 @@ export default defineComponent({
     recommendation: {
       type: Object as PropType<TRecommendation>,
       required: true,
-    }
+    },
+    urldata: {
+      type: Object as PropType<TRecommendation>,
+    },
   },
   components: {
     TitleAndHeader,
@@ -267,10 +273,10 @@ export default defineComponent({
     const artifactDetailInputVmRef = ref();
     const conditionInputVmRef = ref();
 
-    const characterInputRea = reactive(props.characterInput);
-    const artifactDetailInputRea = reactive(props.artifactDetailInput);
-    const conditionInputRea = reactive(props.conditionInput);
-    const recommendationListRea = reactive(props.recommendationList);
+    const characterInputRea = reactive(overwriteObject(deepcopy(CHARACTER_INPUT_TEMPLATE), props.characterInput));
+    const artifactDetailInputRea = reactive(overwriteObject(deepcopy(ARTIFACT_DETAIL_INPUT_TEMPLATE), props.artifactDetailInput));
+    const conditionInputRea = reactive(overwriteObject(deepcopy(CONDITION_INPUT_TEMPLATE), props.conditionInput));
+    const recommendationListRea = reactive([...props.recommendationList]);
 
     const characterSelectVisibleRef = ref(false);
     const character = characterInputRea.character;
@@ -362,6 +368,7 @@ export default defineComponent({
 
     /** おすすめセットを選択しました。もろもろのデータを再作成、ステータスおよびダメージを再計算します */
     const updateRecommendation = async (recommendation: TRecommendation) => {
+      console.log(updateRecommendation.name, recommendation);
       if (!characterInputRea || !artifactDetailInputRea || !conditionInputRea) return;
       await loadRecommendation(
         characterInputRea,
@@ -432,16 +439,18 @@ export default defineComponent({
         !conditionInputRea
       )
         return;
+      console.log(updateCharacter.name, character);
       characterSelectVisibleRef.value = false;
       characterInputRea.character = character;
       characterInputRea.characterMaster = await getCharacterMasterDetail(character);
       recommendationListRea.splice(
         0,
         recommendationListRea.length,
-        ...makeRecommendationList(characterInputRea.characterMaster)
+        ...makeRecommendationList(characterInputRea.characterMaster, props.urldata)
       );
       const recommendation = recommendationListRea[0];
       await updateRecommendation(recommendation);
+      console.log(recommendationListRea);
     };
 
     // キャラクターのパラメータ（突破レベル、レベル、命ノ星座、通常攻撃レベル、元素スキルレベル、元素爆発レベル）を更新します

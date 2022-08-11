@@ -143,23 +143,23 @@ async function main() {
     const conditionInput = deepcopy(CONDITION_INPUT_TEMPLATE);
 
     const searchParams = new URLSearchParams(window.location.search);
-    let savedata;
+    let urldata;
     if (searchParams.has('allin')) {
         const allin = searchParams.get('allin');
         if (allin) {
-            savedata = makeSaveDataFromShareData(allin);
-            characterInput.character = savedata.キャラクター as TCharacterKey;
+            urldata = makeSaveDataFromShareData(allin);
+            characterInput.character = urldata.キャラクター as TCharacterKey;
         } else {
             console.error('query strings are not valid!');
         }
     } else {
         characterInput.character = getCharacterByBirthday();
     }
-    console.log('url', savedata);
+    console.log('url', urldata);
     characterInput.characterMaster = await getCharacterMasterDetail(characterInput.character);
-    const recommendationList = makeRecommendationList(characterInput.characterMaster, savedata);
+    const recommendationList = makeRecommendationList(characterInput.characterMaster, urldata);
     const recommendation = recommendationList[0];
-    await loadRecommendation(characterInput, artifactDetailInput, conditionInput, recommendation.build);
+    await loadRecommendation(characterInput, artifactDetailInput, conditionInput, recommendationList[0].build);
 
     createApp(App, {
         characterInput: characterInput,
@@ -167,6 +167,7 @@ async function main() {
         conditionInput: conditionInput,
         recommendationList: recommendationList,
         recommendation: recommendation,
+        urldata: urldata,
     }).use(i18n).mount('#app')
 }
 

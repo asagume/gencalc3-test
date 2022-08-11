@@ -97,6 +97,7 @@ export default defineComponent({
     const supporterDamageResult = new Map() as Map<string, TDamageResult>;
 
     const setupSupporterDamageResult = async (savedSupporter: { key: string, value: string }) => {
+      console.log(setupSupporterDamageResult.name, savedSupporter);
       const characterInput = deepcopy(CHARACTER_INPUT_TEMPLATE) as TCharacterInput;
       const artifactDetailInput = deepcopy(ARTIFACT_DETAIL_INPUT_TEMPLATE) as TArtifactDetailInput;
       const conditionInput = deepcopy(CONDITION_INPUT_TEMPLATE) as TConditionInput;

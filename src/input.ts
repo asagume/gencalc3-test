@@ -428,14 +428,15 @@ export function parseLevelStr(levelStr: number | string): [number, number] {
         }
         let ascension = 0;
         for (let i = 突破レベルレベルARRAY.length - 1; i >= 0; i--) {
-            if (突破レベルレベルARRAY[i][0] < level) continue;
-            if (突破レベルレベルARRAY[i][突破レベルレベルARRAY[i].length - 1] > level) continue;
+            if (突破レベルレベルARRAY[i][0] > level) continue;
+            if (突破レベルレベルARRAY[i][突破レベルレベルARRAY[i].length - 1] < level) continue;
             ascension = i;
             if (String(levelStr).endsWith('+')) {
                 ascension++;
             }
             break;
         }
+        console.log(levelStr, ascension, level);
         return [ascension, level];
     } catch (error) {
         console.error(levelStr);
@@ -568,6 +569,7 @@ export async function loadRecommendation(
         const artifactStatsSub = deepcopy(聖遺物ステータスTEMPLATE);
 
         if ('レベル' in build) {
+            console.log(build['レベル']);
             [characterInput.突破レベル, characterInput.レベル] = parseLevelStr(build['レベル']);
         }
         ['命ノ星座', '通常攻撃レベル', '元素スキルレベル', '元素爆発レベル'].forEach(key => {

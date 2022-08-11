@@ -156,7 +156,7 @@
     <tr v-show="storageOrRecommendationRef == '1'">
       <td colspan="6">
         <select v-model="selectedRecommendation" @change="recommendationOnChange($event)">
-          <option v-for="item in recommendationList" :value="item" :key="item.name">
+          <option v-for="item in recommendationList" :value="item.name" :key="item.name">
             {{ displayBuildName(item) }}
           </option>
         </select>
@@ -218,7 +218,7 @@ export default defineComponent({
 
     const displayBuildName = (item: TRecommendation) => item.name;
 
-    const selectedRecommendationRef = ref(props.recommendation);
+    const selectedRecommendationRef = ref(props.recommendation.name);
     const characterMaster = computed(() => props.characterInput.characterMaster);
     const weaponMaster = computed(() => props.characterInput.weaponMaster);
     const artifactSetMasters = computed(
@@ -275,6 +275,7 @@ export default defineComponent({
     const recommendationOnChange = (event: Event) => {
       if (!props.recommendationList) return;
       if (event.target instanceof HTMLSelectElement) {
+        console.log(event.target.value);
         context.emit(
           "update:recommendation",
           props.recommendationList[event.target.selectedIndex]
