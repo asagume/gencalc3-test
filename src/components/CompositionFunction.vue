@@ -45,7 +45,7 @@ export default function CompositionFunction() {
             return String(key).replace(/ダメージバフ$/, 'ダメージ');
         }
         if (te(key)) return t(key);
-        const re = new RegExp('(.*?)([\\s_]+)(.*)');
+        const re = new RegExp('(.*?)([\\s_\\(\\)]+)(.*)');
         let result = '';
         let work = key;
         while (work) {

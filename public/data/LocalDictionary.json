@@ -1,4 +1,96 @@
 {
+  "実行": {
+    "en-us": "Execute"
+  },
+  "炎元素": {
+    "en-us": "Pyro"
+  },
+  "水元素": {
+    "en-us": "Hydro"
+  },
+  "風元素": {
+    "en-us": "Anemo"
+  },
+  "雷元素": {
+    "en-us": "Electro"
+  },
+  "草元素": {
+    "en-us": "Dendro"
+  },
+  "氷元素": {
+    "en-us": "Cryo"
+  },
+  "岩元素": {
+    "en-us": "Geo"
+  },
+  "物理": {
+    "en-us": "Physical"
+  },
+  "炎": {
+    "en-us": "Pyro"
+  },
+  "水": {
+    "en-us": "Hydro"
+  },
+  "風": {
+    "en-us": "Anemo"
+  },
+  "雷": {
+    "en-us": "Electro"
+  },
+  "草": {
+    "en-us": "Dendro"
+  },
+  "氷": {
+    "en-us": "Cryo"
+  },
+  "岩": {
+    "en-us": "Geo"
+  },
+  "蒸発": {
+    "en-us": "Vaporize",
+    "zh-cn": "蒸发"
+  },
+  "溶解": {
+    "en-us": "Melt",
+    "zh-cn": "融化"
+  },
+  "過負荷": {
+    "en-us": "Overloaded",
+    "zh-cn": "超载"
+  },
+  "燃焼": {
+    "en-us": "Burning",
+    "zh-cn": "燃烧"
+  },
+  "感電": {
+    "en-us": "Electro-Charged",
+    "zh-cn": "感电"
+  },
+  "凍結": {
+    "en-us": "Frozen",
+    "zh-cn": "冻结"
+  },
+  "超電導": {
+    "en-us": "Superconduct",
+    "zh-cn": "超导"
+  },
+  "拡散": {
+    "en-us": "Swirl",
+    "zh-cn": "扩散"
+  },
+  "結晶": {
+    "en-us": "Crystalize",
+    "zh-cn": "结晶"
+  },
+  "開花": {
+    "en-us": "Bloom",
+    "zh-cn": "绽放"
+  },
+  "激化": {
+    "en-us": "Catalyze",
+    "zh-cn": "激化"
+  },
   "聖遺物メイン効果": {
     "en-us": "Artifact Main-Stats"
   },
@@ -10,6 +102,9 @@
   },
   "補正値入力モード": {
     "en-us": "Edit"
+  },
+  "補正値0初期化": {
+    "en-us": "Clear"
   },
   "生の花": {
     "en-us": "Flower"
@@ -125,30 +220,6 @@
   "シールド強化": {
     "en-us": "Shield Strength"
   },
-  "炎元素": {
-    "en-us": "Pyro"
-  },
-  "水元素": {
-    "en-us": "Hydro"
-  },
-  "風元素": {
-    "en-us": "Anemo"
-  },
-  "雷元素": {
-    "en-us": "Electro"
-  },
-  "草元素": {
-    "en-us": "Dendro"
-  },
-  "氷元素": {
-    "en-us": "Cryo"
-  },
-  "岩元素": {
-    "en-us": "Geo"
-  },
-  "物理": {
-    "en-us": "Physical"
-  },
   "期待値": {
     "en-us": "Expect"
   },
@@ -197,6 +268,63 @@
   "物理ダメージバフ": {
     "en-us": "Physical DMG Bonus"
   },
+  "通常攻撃ダメージバフ": {
+    "en-us": "Normal Attack DMG Bonus"
+  },
+  "重撃ダメージバフ": {
+    "en-us": "Charged Attack DMG Bonus"
+  },
+  "落下攻撃ダメージバフ": {
+    "en-us": "Plunging Attack DMG Bonus"
+  },
+  "元素スキルダメージバフ": {
+    "en-us": "Elemental Skill DMG Bonus"
+  },
+  "元素爆発ダメージバフ": {
+    "en-us": "Elemental Burst DMG Bonus"
+  },
+  "与えるダメージ": {
+    "en-us": "DMG Bonus"
+  },
+  "炎元素ダメージアップ": {
+    "en-us": "Pyro DMG Bonus"
+  },
+  "水元素ダメージアップ": {
+    "en-us": "Hydro DMG Bonus"
+  },
+  "風元素ダメージアップ": {
+    "en-us": "Anemo DMG Bonus"
+  },
+  "雷元素ダメージアップ": {
+    "en-us": "Electro DMG Bonus"
+  },
+  "草元素ダメージアップ": {
+    "en-us": "Dendro DMG Bonus"
+  },
+  "氷元素ダメージアップ": {
+    "en-us": "Cryo DMG Bonus"
+  },
+  "岩元素ダメージアップ": {
+    "en-us": "Geo DMG Bonus"
+  },
+  "物理ダメージアップ": {
+    "en-us": "Physical DMG Bonus"
+  },
+  "通常攻撃ダメージアップ": {
+    "en-us": "Normal Attack DMG Bonus"
+  },
+  "重撃ダメージアップ": {
+    "en-us": "Charged Attack DMG Bonus"
+  },
+  "落下攻撃ダメージアップ": {
+    "en-us": "Plunging Attack DMG Bonus"
+  },
+  "元素スキルダメージアップ": {
+    "en-us": "Elemental Skill DMG Bonus"
+  },
+  "元素爆発ダメージアップ": {
+    "en-us": "Elemental Burst DMG Bonus"
+  },
   "炎元素耐性": {
     "en-us": "Pyro RES"
   },
@@ -220,5 +348,29 @@
   },
   "物理耐性": {
     "en-us": "Physical RES"
+  },
+  "聖遺物詳細": {
+    "en-us": "Artifacts Details"
+  },
+  "基礎ステータス": {
+    "en-us": "Base Stats"
+  },
+  "HP+": {
+    "en-us": "HP+"
+  },
+  "攻撃力+": {
+    "en-us": "ATK+"
+  },
+  "防御力+": {
+    "en-us": "DEF+"
+  },
+  "ダメージバフ": {
+    "en-us": "DMG Bonus"
+  },
+  "実数ダメージ加算": {
+    "en-us": "Flat DMG Bonus"
+  },
+  "元素反応バフ": {
+    "en-us": "Elemental Reaction Bonus"
   }
 }
