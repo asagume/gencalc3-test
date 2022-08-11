@@ -436,7 +436,6 @@ export function parseLevelStr(levelStr: number | string): [number, number] {
             }
             break;
         }
-        console.log(levelStr, ascension, level);
         return [ascension, level];
     } catch (error) {
         console.error(levelStr);
@@ -569,7 +568,6 @@ export async function loadRecommendation(
         const artifactStatsSub = deepcopy(聖遺物ステータスTEMPLATE);
 
         if ('レベル' in build) {
-            console.log(build['レベル']);
             [characterInput.突破レベル, characterInput.レベル] = parseLevelStr(build['レベル']);
         }
         ['命ノ星座', '通常攻撃レベル', '元素スキルレベル', '元素爆発レベル'].forEach(key => {
