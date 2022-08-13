@@ -239,8 +239,8 @@ export default defineComponent({
     const prioritySubstats = reactive(
       artifactDetailInputRea.聖遺物優先するサブ効果 as TArtifactSubKey[]
     );
-    const prioritySubstatIndices = reactive(GENSEN_MASTER_LIST[2].values);
-    const prioritySubstatCounts = reactive(GENSEN_MASTER_LIST[2].counts);
+    const prioritySubstatIndices = reactive(artifactDetailInputRea.聖遺物優先するサブ効果上昇値);
+    const prioritySubstatCounts = reactive(artifactDetailInputRea.聖遺物優先するサブ効果上昇回数);
     const artifactStats = reactive(artifactDetailInputRea.聖遺物ステータス);
     const artifactStatsMain = reactive(artifactDetailInputRea.聖遺物ステータスメイン効果);
     const artifactStatsSub = reactive(artifactDetailInputRea.聖遺物ステータスサブ効果);
@@ -364,47 +364,47 @@ export default defineComponent({
       document.getElementById('artifact-stats-image')?.click();
     }
 
-    watch(
-      mainstats,
-      (newVal, oldVal) => {
-        for (const val of oldVal as any[]) {
-          if (!val) continue;
-          const stat: [TArtifactMainRarity, TArtifactMainStat] = val.split("_");
-          const statValue = ARTIFACT_MAIN_MASTER[stat[0]][stat[1]];
-          artifactStats[stat[1]] -= statValue;
-          if (artifactStats[stat[1]] < 0) artifactStats[stat[1]] = 0;
-        }
-        for (const val of newVal as any[]) {
-          if (!val) continue;
-          const stat: [TArtifactMainRarity, TArtifactMainStat] = val.split("_");
-          const statValue = ARTIFACT_MAIN_MASTER[stat[0]][stat[1]];
-          artifactStats[stat[1]] += statValue;
-        }
-      },
-      { deep: true }
-    );
-    watch(
-      [prioritySubstats, prioritySubstatIndices, prioritySubstatCounts],
-      ([newVal, newValuesVal, newCountsVal], [oldVal, oldValuesVal, oldCountsVal]) => {
-        if (prioritySubstatsDisabledRef.value) return;
-        for (let i = 0; i < 3; i++) {
-          if (!oldVal || !oldValuesVal || !oldCountsVal) continue;
-          const stat = oldVal[i] as TArtifactSubKey;
-          const valueList = prioritySubstatValueList(i, stat);
-          const statValue = valueList[oldValuesVal[i]] * oldCountsVal[i];
-          artifactStats[stat] -= statValue;
-          if (artifactStats[stat] < 0) artifactStats[stat] = 0;
-        }
-        for (let i = 0; i < 3; i++) {
-          if (!newVal || !newValuesVal || !newCountsVal) continue;
-          const stat = newVal[i] as TArtifactSubKey;
-          const valueList = prioritySubstatValueList(i, stat);
-          const statValue = valueList[newValuesVal[i]] * newCountsVal[i];
-          artifactStats[stat] += statValue;
-        }
-      },
-      { deep: true }
-    );
+    // watch(
+    //   mainstats,
+    //   (newVal, oldVal) => {
+    //     for (const val of oldVal as any[]) {
+    //       if (!val) continue;
+    //       const stat: [TArtifactMainRarity, TArtifactMainStat] = val.split("_");
+    //       const statValue = ARTIFACT_MAIN_MASTER[stat[0]][stat[1]];
+    //       artifactStats[stat[1]] -= statValue;
+    //       if (artifactStats[stat[1]] < 0) artifactStats[stat[1]] = 0;
+    //     }
+    //     for (const val of newVal as any[]) {
+    //       if (!val) continue;
+    //       const stat: [TArtifactMainRarity, TArtifactMainStat] = val.split("_");
+    //       const statValue = ARTIFACT_MAIN_MASTER[stat[0]][stat[1]];
+    //       artifactStats[stat[1]] += statValue;
+    //     }
+    //   },
+    //   { deep: true }
+    // );
+    // watch(
+    //   [prioritySubstats, prioritySubstatIndices, prioritySubstatCounts],
+    //   ([newVal, newValuesVal, newCountsVal], [oldVal, oldValuesVal, oldCountsVal]) => {
+    //     if (prioritySubstatsDisabledRef.value) return;
+    //     for (let i = 0; i < 3; i++) {
+    //       if (!oldVal || !oldValuesVal || !oldCountsVal) continue;
+    //       const stat = oldVal[i] as TArtifactSubKey;
+    //       const valueList = prioritySubstatValueList(i, stat);
+    //       const statValue = valueList[oldValuesVal[i]] * oldCountsVal[i];
+    //       artifactStats[stat] -= statValue;
+    //       if (artifactStats[stat] < 0) artifactStats[stat] = 0;
+    //     }
+    //     for (let i = 0; i < 3; i++) {
+    //       if (!newVal || !newValuesVal || !newCountsVal) continue;
+    //       const stat = newVal[i] as TArtifactSubKey;
+    //       const valueList = prioritySubstatValueList(i, stat);
+    //       const statValue = valueList[newValuesVal[i]] * newCountsVal[i];
+    //       artifactStats[stat] += statValue;
+    //     }
+    //   },
+    //   { deep: true }
+    // );
 
     return {
       displayName, targetValue, displayStatValue,

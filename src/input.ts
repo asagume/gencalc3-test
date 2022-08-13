@@ -635,12 +635,12 @@ export async function loadRecommendation(
             artifactDetailInput['聖遺物優先するサブ効果'][index] = substat;
         });
         ['聖遺物優先するサブ効果1上昇値', '聖遺物優先するサブ効果2上昇値', '聖遺物優先するサブ効果3上昇値'].forEach((key, index) => {
-            if (!(key in build)) return;
+            if (!(key in build) && build[key] != -1) return;
             const substatValue = build[key];
             artifactDetailInput['聖遺物優先するサブ効果上昇値'][index] = substatValue;
         });
         ['聖遺物優先するサブ効果1上昇回数', '聖遺物優先するサブ効果2上昇回数', '聖遺物優先するサブ効果3上昇回数'].forEach((key, index) => {
-            if (!(key in build)) return;
+            if (!(key in build) && build[key] != -1) return;
             const substatCount = build[key];
             artifactDetailInput['聖遺物優先するサブ効果上昇回数'][index] = substatCount;
         });
