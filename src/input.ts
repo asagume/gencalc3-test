@@ -637,12 +637,12 @@ export async function loadRecommendation(
             artifactDetailInput['聖遺物優先するサブ効果'][index] = substat;
         });
         ['聖遺物優先するサブ効果1上昇値', '聖遺物優先するサブ効果2上昇値', '聖遺物優先するサブ効果3上昇値'].forEach((key, index) => {
-            if (!(key in build)) return;
+            if (!(key in build) && build[key] != -1) return;
             const substatValue = build[key];
             artifactDetailInput['聖遺物優先するサブ効果上昇値'][index] = substatValue;
         });
         ['聖遺物優先するサブ効果1上昇回数', '聖遺物優先するサブ効果2上昇回数', '聖遺物優先するサブ効果3上昇回数'].forEach((key, index) => {
-            if (!(key in build)) return;
+            if (!(key in build) && build[key] != -1) return;
             const substatCount = build[key];
             artifactDetailInput['聖遺物優先するサブ効果上昇回数'][index] = substatCount;
         });
@@ -1143,6 +1143,14 @@ export function setupConditionValues(conditionInput: TConditionInput, characterI
                     }
                 }
             }
+            // 聖遺物セット効果のオプション初期値は変な位置にあります
+            if ('4セット効果' in master && 'オプション初期値' in (master as any)['4セット効果']) {
+                for (const key of Object.keys((master as any)['4セット効果']['オプション初期値'])) {
+                    if (!(key in conditionInput.conditionValues)) {
+                        conditionInput.conditionValues[key] = (master as any)['4セット効果']['オプション初期値'][key];
+                    }
+                }
+            }
         }
 
         const conditionValues = conditionInput.conditionValues;
@@ -1176,7 +1184,7 @@ export function setupConditionValues(conditionInput: TConditionInput, characterI
                 const conditionMap: Map<string, any[] | null> = myDamageDetail.条件;
                 const exclusionMap: Map<string, string[] | null> = myDamageDetail.排他;
                 conditionMap.forEach((value, key) => {
-                    if (key in conditionValues && conditionValues[key]) {
+                    if (key in conditionValues && conditionValues[key] != null) {
                         const exclusions = exclusionMap.get(key);
                         if (exclusions) {
                             for (const exclusion of exclusions) {

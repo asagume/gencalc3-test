@@ -404,6 +404,7 @@ export default defineComponent({
             2
           ),
         ];
+        console.log('updateRecommendation', artifactDetailInputRea);
         calculateArtifactSubStatByPriority(
           artifactDetailInputRea.聖遺物ステータスサブ効果,
           artifactDetailInputRea.聖遺物メイン効果,
