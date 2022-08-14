@@ -124,6 +124,8 @@ function makeStatusTenmplate() {
     statsObj['会心率'] = 5;
     statsObj['会心ダメージ'] = 50;
     statsObj['元素チャージ効率'] = 100;
+    statsObj['敵レベル'] = 0;
+    statsObj['敵防御力'] = 0;
     return statsObj;
 }
 export const ステータスTEMPLATE = makeStatusTenmplate();
