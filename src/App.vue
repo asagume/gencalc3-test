@@ -4,7 +4,7 @@
       <TitleAndHeader />
     </div>
     <div class="pane2">
-      <CharacterSelect :character="character" :visible="characterSelectVisibleRef"
+      <CharacterSelect :character="characterInputRea.character" :visible="characterSelectVisibleRef"
         @update:character="updateCharacter($event)" />
     </div>
     <div class="pane3" style="margin-bottom: 15px">
@@ -282,7 +282,6 @@ export default defineComponent({
     const recommendationRef = ref(props.recommendation);
 
     const characterSelectVisibleRef = ref(false);
-    const character = characterInputRea.character;
 
     const weaponSelectVisibleRef = ref(false);
     const weapon = characterInputRea.weapon;
@@ -371,8 +370,8 @@ export default defineComponent({
 
     // 構成情報をローカルストレージに保存します
     const saveToStorage = (buildname: string) => {
-      let storageKey = '構成_' + character;
-      if (buildname && buildname != 'あなたの' + character) {
+      let storageKey = '構成_' + characterInputRea.character;
+      if (buildname && buildname != 'あなたの' + characterInputRea.character) {
         storageKey += '_' + buildname;
       }
       const savedata = makeSavedata(characterInputRea, artifactDetailInputRea, conditionInputRea);
@@ -380,7 +379,7 @@ export default defineComponent({
 
       // おすすめセットのリストを更新します
       let opt_buildData;
-      if (props.urldata && props.urldata.キャラクター == character) opt_buildData = props.urldata;
+      if (props.urldata && props.urldata.キャラクター == characterInputRea.character) opt_buildData = props.urldata;
       recommendationListRea.splice(
         0,
         recommendationListRea.length,
@@ -396,15 +395,15 @@ export default defineComponent({
 
     // ローカルストレージの構成情報を削除します
     const removeFromStorage = (buildname: string) => {
-      let storageKey = '構成_' + character;
-      if (buildname && buildname != 'あなたの' + character) {
+      let storageKey = '構成_' + characterInputRea.character;
+      if (buildname && buildname != 'あなたの' + characterInputRea.character) {
         storageKey += '_' + buildname;
       }
       localStorage.removeItem(storageKey);
 
       // おすすめセットのリストを更新します
       let opt_buildData;
-      if (props.urldata && props.urldata.キャラクター == character) opt_buildData = props.urldata;
+      if (props.urldata && props.urldata.キャラクター == characterInputRea.character) opt_buildData = props.urldata;
       recommendationListRea.splice(
         0,
         recommendationListRea.length,
@@ -428,6 +427,7 @@ export default defineComponent({
         conditionInputRea,
         recommendation.build
       );
+      console.log('updateRecommendation', characterInputRea);
       // キャラクターのダメージ計算式を再抽出します
       makeDamageDetailObjArrObjCharacter(characterInputRea);
       // 武器のダメージ計算式を再抽出します
@@ -494,7 +494,7 @@ export default defineComponent({
         !conditionInputRea
       )
         return;
-      console.log(updateCharacter.name, character);
+      console.debug('updateCharacter', character);
       characterSelectVisibleRef.value = false;
       characterInputRea.character = character;
       characterInputRea.characterMaster = await getCharacterMasterDetail(character);
@@ -829,7 +829,7 @@ export default defineComponent({
       characterInputRea.saveDisabled = false;
     }
 
-    updateCharacter(character);
+    updateCharacter(characterInputRea.character);
 
     return {
       displayName,
@@ -845,7 +845,6 @@ export default defineComponent({
       recommendationRef,
 
       characterSelectVisibleRef,
-      character,
       weaponSelectVisibleRef,
       weapon,
       weaponType,

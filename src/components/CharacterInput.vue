@@ -14,17 +14,17 @@
     </tr>
     <tr>
       <td style="width: 20%">
-        <select v-model="ascension" @change="ascensionOnChange">
+        <select v-model="characterInputRea.突破レベル" @change="ascensionOnChange">
           <option v-for="item in ascensionRange" :value="item" :key="item">
             A{{ item }}
           </option>
         </select>
-        <select v-model="level" @change="characterOnChange">
+        <select v-model="characterInputRea.レベル" @change="characterOnChange">
           <option v-for="item in levelRange" :value="item" :key="item">
             Lv.{{ item }}
           </option>
         </select>
-        <select v-model="constellation" @change="characterOnChange">
+        <select v-model="characterInputRea.命ノ星座" @change="characterOnChange">
           <option v-for="item in constellationRange" :value="item" :key="item">
             C{{ item }}
           </option>
@@ -41,17 +41,17 @@
         <div class="tooltip">{{ displayName(weaponMaster.名前) }}</div>
       </td>
       <td style="width: 20%">
-        <select v-model="weaponAscension" @change="weaponAscensionOnChange">
+        <select v-model="characterInputRea.武器突破レベル" @change="weaponAscensionOnChange">
           <option v-for="item in weaponAscensionRange" :value="item" :key="item">
             A{{ item }}
           </option>
         </select>
-        <select v-model="weaponLevel" @change="weaponOnChange">
+        <select v-model="characterInputRea.武器レベル" @change="weaponOnChange">
           <option v-for="item in weaponLevelRange" :value="item" :key="item">
             Lv.{{ item }}
           </option>
         </select>
-        <select v-model="weaponRefine" @change="weaponOnChange">
+        <select v-model="characterInputRea.武器精錬ランク" @change="weaponOnChange">
           <option v-for="item in weaponRefineRange" :value="item" :key="item">
             R{{ item }}
           </option>
@@ -104,21 +104,21 @@
     </tr>
     <tr>
       <td>
-        <select v-model="normalAttackLevel" @change="characterOnChange">
+        <select v-model="characterInputRea.通常攻撃レベル" @change="characterOnChange">
           <option v-for="item in normalAttackLevelRange" :value="item" :key="item">
             Lv.{{ item }}
           </option>
         </select>
       </td>
       <td>
-        <select v-model="elementalSkillLevel" @change="characterOnChange">
+        <select v-model="characterInputRea.元素スキルレベル" @change="characterOnChange">
           <option v-for="item in elementalSkillLevelRange" :value="item" :key="item">
             Lv.{{ item }}
           </option>
         </select>
       </td>
       <td>
-        <select v-model="elementalBurstLevel" @change="characterOnChange">
+        <select v-model="characterInputRea.元素爆発レベル" @change="characterOnChange">
           <option v-for="item in elementalBurstLevelRange" :value="item" :key="item">
             Lv.{{ item }}
           </option>
@@ -137,17 +137,17 @@
       <td colspan="4">
         <label>
           <input class="save-name" type="text" v-model="buildname" maxlength="20" placeholder="input build name"
-            @change="saveDisabled = false" />
+            @change="characterInputRea.saveDisabled = false" />
         </label>
       </td>
       <td>
-        <button type="button" :disabled="saveDisabled" @click="saveOnClick">
+        <button type="button" :disabled="characterInputRea.saveDisabled" @click="saveOnClick">
           Save
           <!-- <span class="material-symbols-outlined"> save </span> -->
         </button>
       </td>
       <td>
-        <button type="button" :disabled="removeDisabled" @click="removeOnClick">
+        <button type="button" :disabled="characterInputRea.removeDisabled" @click="removeOnClick">
           Remove
           <!-- <span class="material-symbols-outlined"> delete </span> -->
         </button>
@@ -390,22 +390,13 @@ export default defineComponent({
       bgImageClass,
       colorClass,
       bgColorClass,
+
+      characterInputRea,
       selectedRecommendation: selectedRecommendationRef,
       characterMaster,
       weaponMaster,
       artifactSetMasters,
-      ascension: characterInputRea.突破レベル,
-      level: characterInputRea.レベル,
-      constellation: characterInputRea.命ノ星座,
       recommendationOnChange,
-      normalAttackLevel: characterInputRea.通常攻撃レベル,
-      elementalSkillLevel: characterInputRea.元素スキルレベル,
-      elementalBurstLevel: characterInputRea.元素爆発レベル,
-      weaponAscension: characterInputRea.武器突破レベル,
-      weaponLevel: characterInputRea.武器レベル,
-      weaponRefine: characterInputRea.武器精錬ランク,
-      saveDisabled: characterInputRea.saveDisabled,
-      removeDisabled: characterInputRea.removeDisabled,
       buildname: buildnameRef,
       saveOnClick,
       removeOnClick,
