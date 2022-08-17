@@ -12,6 +12,7 @@
         :recommendationList="recommendationListRea" :recommendation="recommendationRef"
         :artifactSetSelectVisible="artifactSetSelectVisibleRef"
         @open:character-select="characterSelectVisibleRef = !characterSelectVisibleRef"
+        @saveToStorage="saveToStorage($event)" @removeFromStorage="removeFromStorage($event)"
         @update:recommendation="updateRecommendation($event)" @open:weapon-select="openWeaponSelect"
         @open:artifact-set-select="openArtifactSetSelect($event)" @open:artifact-detail-input="openArtifactDetailInput"
         @update:character-input-character="updateCharacterInputCharacter($event)"
@@ -131,8 +132,8 @@
       <hr />
       <p>© 2021 asagume</p>
       <p>
-        本サイト内の画像はHoYoverse/COGNOSPHEREの著作物です。Copyright © COGNOSPHERE. All
-        Rights Reserved.
+        本サイト内の画像はHoYoverse/COGNOSPHEREの著作物です。
+        Copyright © COGNOSPHERE. All Rights Reserved.
       </p>
     </div>
   </div>
@@ -200,6 +201,7 @@ import {
   CHARACTER_INPUT_TEMPLATE,
   ARTIFACT_DETAIL_INPUT_TEMPLATE,
   CONDITION_INPUT_TEMPLATE,
+  makeSavedata,
 } from "@/input";
 import {
   ARTIFACT_SET_MASTER,
@@ -367,9 +369,58 @@ export default defineComponent({
     };
     updateEnemy();
 
+    // 構成情報をローカルストレージに保存します
+    const saveToStorage = (buildname: string) => {
+      let storageKey = '構成_' + character;
+      if (buildname && buildname != 'あなたの' + character) {
+        storageKey += '_' + buildname;
+      }
+      const savedata = makeSavedata(characterInputRea, artifactDetailInputRea, conditionInputRea);
+      localStorage.setItem(storageKey, JSON.stringify(savedata));
+
+      // おすすめセットのリストを更新します
+      let opt_buildData;
+      if (props.urldata && props.urldata.キャラクター == character) opt_buildData = props.urldata;
+      recommendationListRea.splice(
+        0,
+        recommendationListRea.length,
+        ...makeRecommendationList(characterInputRea.characterMaster, opt_buildData)
+      );
+
+      // サポーター情報を更新します
+      setupSavedSupporters();
+
+      characterInputRea.saveDisabled = true;
+      characterInputRea.removeDisabled = false;
+    }
+
+    // ローカルストレージの構成情報を削除します
+    const removeFromStorage = (buildname: string) => {
+      let storageKey = '構成_' + character;
+      if (buildname && buildname != 'あなたの' + character) {
+        storageKey += '_' + buildname;
+      }
+      localStorage.removeItem(storageKey);
+
+      // おすすめセットのリストを更新します
+      let opt_buildData;
+      if (props.urldata && props.urldata.キャラクター == character) opt_buildData = props.urldata;
+      recommendationListRea.splice(
+        0,
+        recommendationListRea.length,
+        ...makeRecommendationList(characterInputRea.characterMaster, opt_buildData)
+      );
+
+      // サポーター情報を更新します
+      setupSavedSupporters();
+
+      characterInputRea.saveDisabled = false;
+      characterInputRea.removeDisabled = true;
+    }
+
     /** おすすめセットを選択しました。もろもろのデータを再作成、ステータスおよびダメージを再計算します */
     const updateRecommendation = async (recommendation: TRecommendation) => {
-      console.log(updateRecommendation.name, recommendation);
+      console.debug(updateRecommendation.name, recommendation);
       if (!characterInputRea || !artifactDetailInputRea || !conditionInputRea) return;
       await loadRecommendation(
         characterInputRea,
@@ -404,7 +455,6 @@ export default defineComponent({
             2
           ),
         ];
-        console.log('updateRecommendation', artifactDetailInputRea);
         calculateArtifactSubStatByPriority(
           artifactDetailInputRea.聖遺物ステータスサブ効果,
           artifactDetailInputRea.聖遺物メイン効果,
@@ -430,6 +480,9 @@ export default defineComponent({
         conditionInputRea as any,
         statsInput
       );
+
+      characterInputRea.saveDisabled = false;
+      characterInputRea.removeDisabled = !recommendation.overwrite;
     };
 
     /** キャラクターを選択しました。もろもろのデータを再作成、ステータスおよびダメージを再計算します */
@@ -480,6 +533,8 @@ export default defineComponent({
         conditionInputRea as any,
         statsInput
       );
+
+      characterInputRea.saveDisabled = false;
     };
 
     // 武器選択画面を開きます/閉じます
@@ -517,6 +572,8 @@ export default defineComponent({
         conditionInputRea as any,
         statsInput
       );
+
+      characterInputRea.saveDisabled = false;
     };
 
     // 武器のパラメータ（突破レベル、レベル、精錬ランク）を更新します
@@ -542,6 +599,8 @@ export default defineComponent({
         conditionInputRea as any,
         statsInput
       );
+
+      characterInputRea.saveDisabled = false;
     };
 
     // 聖遺物セット効果選択画面を開きます/閉じます
@@ -586,6 +645,8 @@ export default defineComponent({
         conditionInputRea as any,
         statsInput
       );
+
+      characterInputRea.saveDisabled = false;
     };
 
     // 聖遺物詳細画面を開きます/閉じます
@@ -613,6 +674,8 @@ export default defineComponent({
         optionInputRea
       );
       calculateResult(damageResult, characterInputRea, conditionInputRea, statsInput);
+
+      characterInputRea.saveDisabled = false;
     };
 
     /** キャラクター情報を開きます */
@@ -646,6 +709,8 @@ export default defineComponent({
         conditionInputRea as any,
         statsInput
       );
+
+      characterInputRea.saveDisabled = false;
     };
 
     const myDamageDatailArr = computed(() => {
@@ -760,6 +825,8 @@ export default defineComponent({
     /** 聖遺物ステータス（サブ効果）をクリアします*/
     const orderInitializeArtifactStatsSub = () => {
       artifactDetailInputVmRef.value.initializeArtifactStatsSub();
+
+      characterInputRea.saveDisabled = false;
     }
 
     updateCharacter(character);
@@ -808,6 +875,7 @@ export default defineComponent({
       ownListToggle1Ref,
       ownListToggle2Ref,
 
+      saveToStorage, removeFromStorage,
       updateRecommendation,
       updateCharacter,
       openWeaponSelect,
