@@ -215,15 +215,12 @@ export default defineComponent({
     const displayBuildName = (item: TRecommendation) => item.name;
 
     const selectedRecommendationRef = ref(props.recommendation.name);
-    const characterMaster = computed(() => props.characterInput.characterMaster);
-    const weaponMaster = computed(() => props.characterInput.weaponMaster);
-    const artifactSetMasters = computed(
-      () =>
-        props.characterInput.artifactSetMasters ?? [
-          ARTIFACT_SET_MASTER_DUMMY,
-          ARTIFACT_SET_MASTER_DUMMY,
-        ]
-    );
+    const characterMaster = computed(() => characterInputRea.characterMaster);
+    const weaponMaster = computed(() => characterInputRea.weaponMaster);
+    const artifactSetMasters = computed(() => characterInputRea.artifactSetMasters ?? [
+      ARTIFACT_SET_MASTER_DUMMY,
+      ARTIFACT_SET_MASTER_DUMMY,
+    ]);
 
     const visionSrc = (item: TCharacterDetail) => ELEMENT_IMG_SRC[item.元素] as string;
     const bgImageClass = (item: TCharacterDetail | TWeaponDetail) =>
