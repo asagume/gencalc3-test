@@ -212,14 +212,11 @@ import {
   makePrioritySubstatValueList,
 } from "@/calculate";
 import {
-  ARTIFACT_MAIN_MASTER,
   GENSEN_MASTER_LIST,
-  TArtifactMainRarity,
-  TArtifactMainStat,
   TArtifactSubKey,
   TGensen,
 } from "@/master";
-import { computed, defineComponent, PropType, reactive, ref, watch } from "vue";
+import { computed, defineComponent, PropType, reactive, ref } from "vue";
 import CompositionFunction from './CompositionFunction.vue';
 const resizePinnedImage = require('../gencalc_ocr.js');
 
@@ -273,6 +270,7 @@ export default defineComponent({
     const _calculateArtifactStatsMain = () => {
       calculateArtifactStatsMain(artifactStatsMain, mainstats);
     };
+
     /** 聖遺物ステータスを計算します（優先するサブ効果） */
     const _calculateArtifactStatsPrioritySub = () => {
       if (prioritySubstatsDisabledRef.value) return;
@@ -290,16 +288,19 @@ export default defineComponent({
         prioritySubstatCounts
       );
     };
+
     /** 聖遺物ステータスを計算します */
     _calculateArtifactStatsMain();
     _calculateArtifactStatsPrioritySub();
     calculateArtifactStats(artifactDetailInputRea);
+
     /** メイン効果が更新されました */
     const updateMainstats = () => {
       _calculateArtifactStatsMain();
       calculateArtifactStats(artifactDetailInputRea);
       context.emit("update:artifact-detail", artifactDetailInputRea);
     };
+
     /** サブ効果が更新されました */
     const artifactStatsOnChange = (opt_stat?: any, opt_value?: string) => {
       Object.keys(artifactStats)
@@ -316,6 +317,7 @@ export default defineComponent({
       calculateArtifactStats(artifactDetailInputRea);
       context.emit("update:artifact-detail", artifactDetailInputRea);
     };
+
     /** 優先するサブ効果が更新されました */
     const updatePrioritySubstats = () => {
       prioritySubstatsDisabledRef.value = false;

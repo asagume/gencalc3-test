@@ -38,6 +38,11 @@
       <li v-for="item in displayStatAjustmentList" :key="item">{{ item }}</li>
     </ul>
   </fieldset>
+
+  <p>
+    キャラクターの天賦レベルやステータスによって効果量が変動する種類のオプションはデフォルト名称の構成保存データが存在する場合に選択可能になります。
+    構成保存データのデフォルト名称：あなたの{キャラクターの名前}
+  </p>
 </template>
 
 <script lang="ts">
