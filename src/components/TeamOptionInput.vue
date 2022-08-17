@@ -39,8 +39,9 @@
     </ul>
   </fieldset>
 
-  <p>
+  <p class="notice">
     キャラクターの天賦レベルやステータスによって効果量が変動する種類のオプションはデフォルト名称の構成保存データが存在する場合に選択可能になります。
+    <br />
     構成保存データのデフォルト名称：あなたの{キャラクターの名前}
   </p>
 </template>
@@ -398,5 +399,10 @@ legend label.toggle-switch {
 
 label.condition {
   min-width: calc(100% / 3 - 1rem - 4px);
+}
+
+p.notice {
+  text-align: left;
+  color: chocolate;
 }
 </style>
