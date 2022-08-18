@@ -7,12 +7,13 @@ import os
 import os.path
 import re
 
-SRC_PATH = './RawData/data/weapons'
+SRC_PATH = './RawData/data/weapon/ja-jp'
 ORG_PATH = '../public/data/weapons'
 DST_PATH = '../public/data/weapons'
-ICON_URL_PATH = 'public/images/weapons'
+ICON_URL_PATH = 'images/weapons'
 
 os.chdir(os.path.dirname(__file__))
+print(os.getcwd())
 
 templateJson = {
     '名前': None,
