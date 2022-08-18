@@ -23,10 +23,10 @@ import OPTION2_MASTER from '../public/data/OptionMaster2.json'// assert {type: '
 
 import ELEMENTAL_REACTION_MASTER from '../public/data/ElementalReactionMaster.json'// assert {type: 'json'}
 
-import HOYO_DICTIONARY2 from '../public/data/HoYoDictionary2.json'// assert {type: 'json'}
-import HOYO_DICTIONARY4 from '../public/data/HoYoDictionary4.json'// assert {type: 'json'}
-import HOYO_DICTIONARY5 from '../public/data/HoYoDictionary5.json'// assert {type: 'json'}
-import LOCAL_DICTIONARY from '../public/data/LocalDictionary.json'// assert {type: 'json'}
+// import HOYO_DICTIONARY2 from '../public/data/HoYoDictionary2.json'// assert {type: 'json'}
+// import HOYO_DICTIONARY4 from '../public/data/HoYoDictionary4.json'// assert {type: 'json'}
+// import HOYO_DICTIONARY5 from '../public/data/HoYoDictionary5.json'// assert {type: 'json'}
+// import LOCAL_DICTIONARY from '../public/data/LocalDictionary.json'// assert {type: 'json'}
 // import { isPlainObject, isString } from './common'
 
 export {
@@ -311,7 +311,7 @@ export type TElementalReactionKey = keyof typeof ELEMENTAL_REACTION_MASTER;
 export const ELEMENTAL_REACTION_MASTER_LIST = (Object.keys(ELEMENTAL_REACTION_MASTER) as TElementalReactionKey[])
     .map(key => ({ key: key, ...ELEMENTAL_REACTION_MASTER[key] }));
 
-export const DICTIONARY_MASTER = { ...HOYO_DICTIONARY2, ...HOYO_DICTIONARY4, ...HOYO_DICTIONARY5, ...LOCAL_DICTIONARY };
+// export const DICTIONARY_MASTER = { ...HOYO_DICTIONARY2, ...HOYO_DICTIONARY4, ...HOYO_DICTIONARY5, ...LOCAL_DICTIONARY };
 
 ////////////////
 ////////////////

@@ -1,12 +1,15 @@
 <template>
   <div class="base-container">
+
     <div class="pane1">
       <TitleAndHeader />
     </div>
+
     <div class="pane2">
       <CharacterSelect :character="characterInputRea.character" :visible="characterSelectVisibleRef"
         @update:character="updateCharacter($event)" />
     </div>
+
     <div class="pane3" style="margin-bottom: 15px">
       <CharacterInput ref="characterInputVmRef" :characterInput="characterInputRea"
         :recommendationList="recommendationListRea" :recommendation="recommendationRef"
@@ -31,6 +34,7 @@
       <ArtifactDetailInput ref="artifactDetailInputVmRef" :visible="artifactDetailInputVisibleRef"
         :artifactDetailInput="artifactDetailInputRea" @update:artifact-detail="updateArtifactDetail($event)" />
     </div>
+
     <div class="pane6">
       <div>
         <input class="hidden" id="pane6-toggle-1" type="checkbox" v-model="pane6Toggle1Ref" />
@@ -69,7 +73,7 @@
         </template>
         <template v-if="statInputTabRef == 3">
           <label class="enemy">{{ displayName("敵") }}
-            <select v-model="selectedEnemy" @change="updateEnemy">
+            <select v-model="selectedEnemyRef" @change="updateEnemy">
               <option v-for="item in enemyList" :value="item" :key="item.key">
                 {{ displayName(item.key) }}
               </option>
@@ -96,16 +100,19 @@
             @update:elemental-resonance="updateElementalResonance($event)" />
         </template>
         <template v-if="optionInputTabRef == 2">
-          <TeamOptionInput :savedSupporters="savedSupporters" @update:team-option="updateTeamOption" />
+          <TeamOptionInput :character="characterInputRea.character" :savedSupporters="savedSupporters"
+            @update:team-option="updateTeamOption" />
         </template>
         <template v-if="optionInputTabRef == 3">
           <MiscOptionInput @update:misc-option="updateMiscOption" />
         </template>
       </div>
     </div>
+
     <div class="result-pane">
       <DamageResult :damageResult="damageResult" />
     </div>
+
     <div class="bottom-pane">
       <h2>
         <input class="hidden" id="own-list-toggle-1" type="checkbox" v-model="ownListToggle1Ref" />
@@ -122,12 +129,15 @@
       </h2>
       <WeaponOwnList v-if="ownListToggle2Ref" />
     </div>
+
     <div class="pane7">
       <AboutMyApp />
       <ConfigurationInput @update:configuration-input="updateConfigurationInput"
         @order:initialize-artifact-stats-sub="orderInitializeArtifactStatsSub" />
     </div>
+
     <hr />
+
     <div class="footer">
       <hr />
       <p>© 2021 asagume</p>
@@ -136,7 +146,9 @@
         Copyright © COGNOSPHERE. All Rights Reserved.
       </p>
     </div>
+
   </div>
+
   <div id="debug-info" v-if="true">
     <hr />
     <h2>DEBUG</h2>
@@ -232,22 +244,11 @@ export default defineComponent({
   name: "App",
   props: {
     characterInput: { type: Object as PropType<TCharacterInput>, required: true },
-    artifactDetailInput: {
-      type: Object as PropType<TArtifactDetailInput>,
-      required: true,
-    },
+    artifactDetailInput: { type: Object as PropType<TArtifactDetailInput>, required: true, },
     conditionInput: { type: Object as PropType<TConditionInput>, required: true },
-    recommendationList: {
-      type: Array as PropType<TRecommendation[]>,
-      required: true,
-    },
-    recommendation: {
-      type: Object as PropType<TRecommendation>,
-      required: true,
-    },
-    urldata: {
-      type: Object as PropType<TAnyObject>,
-    },
+    recommendationList: { type: Array as PropType<TRecommendation[]>, required: true, },
+    recommendation: { type: Object as PropType<TRecommendation>, required: true, },
+    urldata: { type: Object as PropType<TAnyObject>, },
   },
   components: {
     TitleAndHeader,
@@ -316,7 +317,7 @@ export default defineComponent({
     ];
     const enemyStatsCategoryList = ["敵元素ステータス·耐性"];
     const enemyList = ENEMY_MASTER_LIST;
-    const selectedEnemy = ref(enemyList[0]);
+    const selectedEnemyRef = ref(enemyList[0]);
     statsInput.statAdjustments["敵レベル"] = 90;
     statsInput.statAdjustments["敵防御力"] = 0;
 
@@ -329,7 +330,7 @@ export default defineComponent({
     };
     setupSavedSupporters();
 
-    //
+    // 元素共鳴, チーム, その他
     const optionInputRea = reactive(deepcopy(OPTION_INPUT_TEMPLATE) as TOptionInput);
     // 元素共鳴
     for (const name of Object.keys(ELEMENTAL_RESONANCE_MASTER)) {
@@ -349,7 +350,7 @@ export default defineComponent({
 
     /** 敵が変更されました。ステータスおよびダメージを再計算します */
     const updateEnemy = () => {
-      (statsInput.enemyMaster as any) = selectedEnemy.value;
+      (statsInput.enemyMaster as any) = selectedEnemyRef.value;
       // ステータスを計算します
       calculateStats(
         statsInput,
@@ -368,7 +369,7 @@ export default defineComponent({
     };
     updateEnemy();
 
-    // 構成情報をローカルストレージに保存します
+    /** 構成情報をローカルストレージに保存します */
     const saveToStorage = (buildname: string) => {
       let storageKey = '構成_' + characterInputRea.character;
       if (buildname && buildname != 'あなたの' + characterInputRea.character) {
@@ -393,7 +394,7 @@ export default defineComponent({
       characterInputRea.removeDisabled = false;
     }
 
-    // ローカルストレージの構成情報を削除します
+    /** ローカルストレージの構成情報を削除します */
     const removeFromStorage = (buildname: string) => {
       let storageKey = '構成_' + characterInputRea.character;
       if (buildname && buildname != 'あなたの' + characterInputRea.character) {
@@ -419,7 +420,7 @@ export default defineComponent({
 
     /** おすすめセットを選択しました。もろもろのデータを再作成、ステータスおよびダメージを再計算します */
     const updateRecommendation = async (recommendation: TRecommendation) => {
-      console.debug(updateRecommendation.name, recommendation);
+      console.debug('updateRecommendation', recommendation);
       if (!characterInputRea || !artifactDetailInputRea || !conditionInputRea) return;
       await loadRecommendation(
         characterInputRea,
@@ -427,7 +428,12 @@ export default defineComponent({
         conditionInputRea,
         recommendation.build
       );
-      console.log('updateRecommendation', characterInputRea);
+      if (recommendation.overwrite) {
+        characterInputRea.buildname = recommendation.name;
+      } else {
+        characterInputRea.buildname = '';
+      }
+      console.debug('updateRecommendation', characterInputRea);
       // キャラクターのダメージ計算式を再抽出します
       makeDamageDetailObjArrObjCharacter(characterInputRea);
       // 武器のダメージ計算式を再抽出します
@@ -509,7 +515,7 @@ export default defineComponent({
       await updateRecommendation(recommendationRef.value);
     };
 
-    // キャラクターのパラメータ（突破レベル、レベル、命ノ星座、通常攻撃レベル、元素スキルレベル、元素爆発レベル）を更新します
+    /** キャラクターのパラメータ（突破レベル、レベル、命ノ星座、通常攻撃レベル、元素スキルレベル、元素爆発レベル）を更新します */
     const updateCharacterInputCharacter = (characterInput: any) => {
       if (!characterInputRea) return;
       Object.keys(characterInput).forEach((key) => {
@@ -537,7 +543,7 @@ export default defineComponent({
       characterInputRea.saveDisabled = false;
     };
 
-    // 武器選択画面を開きます/閉じます
+    /** 武器選択画面を開きます/閉じます */
     const openWeaponSelect = () => {
       weaponSelectVisibleRef.value = !weaponSelectVisibleRef.value;
       if (weaponSelectVisibleRef.value) {
@@ -576,7 +582,7 @@ export default defineComponent({
       characterInputRea.saveDisabled = false;
     };
 
-    // 武器のパラメータ（突破レベル、レベル、精錬ランク）を更新します
+    /** 武器のパラメータ（突破レベル、レベル、精錬ランク）を更新します */
     const updateCharacterInputWeapon = (characterInput: any) => {
       Object.keys(characterInput).forEach((key) => {
         if (characterInputRea && key in characterInputRea) {
@@ -603,7 +609,7 @@ export default defineComponent({
       characterInputRea.saveDisabled = false;
     };
 
-    // 聖遺物セット効果選択画面を開きます/閉じます
+    /** 聖遺物セット効果選択画面を開きます/閉じます */
     const openArtifactSetSelect = (index: number) => {
       if (index == artifactSetIndexRef.value) {
         artifactSetSelectVisibleRef.value = !artifactSetSelectVisibleRef.value;
@@ -649,7 +655,7 @@ export default defineComponent({
       characterInputRea.saveDisabled = false;
     };
 
-    // 聖遺物詳細画面を開きます/閉じます
+    /** 聖遺物詳細画面を開きます/閉じます */
     const openArtifactDetailInput = () => {
       artifactDetailInputVisibleRef.value = !artifactDetailInputVisibleRef.value;
       if (artifactDetailInputVisibleRef.value) {
@@ -659,7 +665,7 @@ export default defineComponent({
       }
     };
 
-    // 聖遺物ステータスが変更されました。ステータスおよびダメージを再計算します
+    /** 聖遺物ステータスが変更されました。ステータスおよびダメージを再計算します */
     const updateArtifactDetail = (artifactDetailInput: TArtifactDetailInput) => {
       if (!artifactDetailInputRea) return;
       for (const stat of Object.keys(artifactDetailInput.聖遺物ステータス)) {
@@ -694,7 +700,7 @@ export default defineComponent({
       }
     };
 
-    // オプション条件が変更されました。ステータスおよびダメージを再計算します
+    /** オプション条件が変更されました。ステータスおよびダメージを再計算します */
     const updateCondition = () => {
       calculateStats(
         statsInput,
@@ -860,7 +866,7 @@ export default defineComponent({
       characterStats2CategoryList,
       enemyStatsCategoryList,
       enemyList,
-      selectedEnemy,
+      selectedEnemyRef,
       updateEnemy,
       optionInputRea,
       damageResult,
@@ -908,10 +914,6 @@ export default defineComponent({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 }
-
-h2 label {
-  min-width: 50% !important;
-}
 </style>
 <style scoped>
 .toggle-switch {
@@ -932,6 +934,10 @@ label.enemy-level {
 
 label.enemy-level input {
   width: 10rem;
+}
+
+h2 label.toggle-switch {
+  min-width: 75% !important;
 }
 
 #debug-info dl dt,
