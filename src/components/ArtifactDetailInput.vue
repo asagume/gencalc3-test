@@ -251,11 +251,11 @@ export default defineComponent({
     const gensenRef = ref(GENSEN_MASTER_LIST[2] as TGensen);
 
     const upTotalCount = computed(() => {
-      let result = 0;
+      let work = 0;
       for (let count of prioritySubstatCounts) {
-        result += count;
+        work += count;
       }
-      return result;
+      return Math.min(45, 40 + Math.round(Math.max(0, (work - 12) / 4)));
     });
 
     /** 優先するサブ効果上昇値のオプション値のリストを作成します */
@@ -358,6 +358,7 @@ export default defineComponent({
       context.emit("update:artifact-detail", artifactDetailInputRea);
     }
 
+    /** 聖遺物詳細OCR機能 */
     const loadArtifactStatsByOcr = async (event: Event) => {
       resizePinnedImage(event);
     }

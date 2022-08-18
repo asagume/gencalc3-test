@@ -136,8 +136,8 @@
     <tr v-show="storageOrRecommendationRef == '0'">
       <td colspan="4">
         <label>
-          <input class="save-name" type="text" v-model="buildname" maxlength="20" placeholder="input build name"
-            @change="characterInputRea.saveDisabled = false" />
+          <input class="save-name" type="text" v-model="characterInputRea.buildname" maxlength="20"
+            placeholder="input build name" @change="characterInputRea.saveDisabled = false" />
         </label>
       </td>
       <td>
@@ -230,20 +230,18 @@ export default defineComponent({
     const bgColorClass = (item: TCharacterDetail) =>
       ELEMENT_BG_COLOR_CLASS[item.元素] as string;
 
-    const buildnameRef = ref("");
-
     /** 構成データを保存します */
     const saveOnClick = () => {
       characterInputRea.saveDisabled = false;   // 保存不可
       characterInputRea.removeDisabled = true;  // 削除可能
-      context.emit('saveToStorage', buildnameRef.value);
+      context.emit('saveToStorage', characterInputRea.buildname);
     };
 
     /** 構成データを削除します */
     const removeOnClick = () => {
       characterInputRea.removeDisabled = false; // 削除不可
       characterInputRea.saveDisabled = true;    // 保存可能
-      context.emit('removeFromStorage', buildnameRef.value);
+      context.emit('removeFromStorage', characterInputRea.buildname);
     }
 
     /** 突破レベルの範囲 */
@@ -397,7 +395,6 @@ export default defineComponent({
       weaponMaster,
       artifactSetMasters,
       recommendationOnChange,
-      buildname: buildnameRef,
       saveOnClick,
       removeOnClick,
       ascensionRange,

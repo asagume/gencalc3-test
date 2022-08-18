@@ -74,13 +74,12 @@ export default defineComponent({
           (statsInputRea.statsObj && statsInputRea.statsObj[stat])
       ) ?? [];
 
-    //
+    /** 補正値が変更されました */
     const adjustmentsOnChange = () => {
-      console.log(statsInputRea.statAdjustments);
       context.emit("update:stat-adjustments", statsInputRea.statAdjustments);
     };
 
-    // 補正値を0クリアします
+    /** 補正値を0クリアします */
     const initializeAdjustments = () => {
       if (!props.categoryList) return;
       for (const category of props.categoryList) {
